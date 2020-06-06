@@ -9,6 +9,7 @@
                 size="sm"
                 class="mr-sm-2"
                 placeholder="Card Name">
+                <span class="glyphicon glyphicon-search"></span>
             </b-form-input>
             <b-button
                 @click="searchCard"

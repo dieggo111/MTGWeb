@@ -6,7 +6,6 @@ import VueRouter from 'vue-router';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import {store} from './store'
 
 import SearchComp from './components/SearchComp'
 import DeckBuilderComp from './components/DeckBuilderComp'
@@ -38,10 +37,6 @@ const router = new VueRouter({
 new Vue({
   el:'#app',
   router,
-  store,
   render: h => h(App)
 });
 
-// new Vue({
-//   render: h => h(App),
-// }).$mount('#app')
