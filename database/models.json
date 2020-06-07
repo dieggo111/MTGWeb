@@ -1,4 +1,4 @@
 {
     "Sets": "CREATE TABLE Sets(id SERIAL PRIMARY KEY, setName VARCHAR(64) NOT NULL UNIQUE)",
-    "Cards": "CREATE TABLE Cards(card_id SERIAL PRIMARY KEY, artist VARCHAR(64), colors CHAR[], convertedManaCost INTEGER, image_uri_normal VARCHAR(200), image_uri_small VARCHAR(200), manaCost VARCHAR(24), name VARCHAR(64), power CHAR(1), rarity VARCHAR(12), scryfallId VARCHAR(64), setId INTEGER, text TEXT, toughness INTEGER, type VARCHAR(64), types VARCHAR[], FOREIGN KEY (setId) REFERENCES Sets(id) ON DELETE CASCADE)"
+    "Cards": "CREATE TABLE Cards(card_id SERIAL PRIMARY KEY, artist VARCHAR(64), additional_print BOOLEAN DEFAULT FALSE, colors CHAR[], convertedManaCost INTEGER, image_uri_normal VARCHAR(200), image_uri_small VARCHAR(200), manaCost VARCHAR(24), name VARCHAR(64), power CHAR(2), rarity VARCHAR(12), scryfallId VARCHAR(64), setId INTEGER, text TEXT, toughness CHAR(2), type VARCHAR(64), types VARCHAR[], FOREIGN KEY (setId) REFERENCES Sets(id) ON DELETE CASCADE)"
 }

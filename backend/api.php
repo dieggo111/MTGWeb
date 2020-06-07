@@ -34,47 +34,53 @@ function uploadSet($path, $setId=null) {
         $setId = $setId[0]["id"];
     }
     $data = getJsonData($path)["cards"];
-    $data = addCardProps($data, $setId);
-    $data = adjustCardData($data);
     foreach ($data as $card) {
+        if (isset($card["frameEffect"]) || isset($card["flavorName"])) {
+            $card = $card + array("additional_print" => "true");
+        }
+        $card = addCardProps($card, $setId);
+        $card = purgeCardData($card);
+        $card = handleApostrophe($card);
         $columns = array_keys($card);
         $values = array_values($card);
         $GLOBALS["sql"]->insert("Cards", $columns, $values);
+        echo $card["name"]."\n";
     }
 }
 
 /**
  * Add the setId reference from 'Sets' table as well as image urls, which
- * can be fetched from scryfall.com via the scryfallId.
+ * can be fetched from 'scryfall.com' via the 'scryfallId'.
  */
-function addCardProps($data, $setId) {
-    for ($i=0; $i<count($data); $i++) {
-        $data[$i] = $data[$i] + array("setId" => $setId);
-        $images = getImageUrl(
-            "https://api.scryfall.com/cards/".$data[$i]["scryfallId"]
-        );
-        $data[$i] = $data[$i] + array("image_uri_small" => $images[0]);
-        $data[$i] = $data[$i] + array("image_uri_normal" => $images[1]);
-    }
-    return $data;
+function addCardProps($card, $setId) {
+    $card = $card + array("setId" => $setId);
+    $images = getImageUrl(
+        "https://api.scryfall.com/cards/".$card["scryfallId"]
+    );
+    $card = $card + array("image_uri_small" => $images[0]);
+    $card = $card + array("image_uri_normal" => $images[1]);
+    return $card;
 }
 
 /**
  * Remove the redundant card information.
  * */
-function adjustCardData($data) {
+function purgeCardData($card) {
     $valid_columns = $GLOBALS["sql"]->fetchColumns('Cards');
-    // print_r($valid_columns);
-    foreach ($data as $card_nr => $card_data) {
-        foreach(array_keys($card_data) as $key) {
-            // print_r($value);
-            if (!in_array(strtolower($key), $valid_columns)) {
-                unset($data[$card_nr][$key]);
-            }
-
+    foreach(array_keys($card) as $key) {
+        if (!in_array(strtolower($key), $valid_columns)) {
+            unset($card[$key]);
         }
     }
-    return $data;
+    return $card;
+}
+
+function handleApostrophe($card) {
+    $card["name"] = str_replace("'", "''", $card["name"]);
+    if (isset($card["text"])) {
+        $card["text"] = str_replace("'", "''", $card["text"]);
+    }
+    return $card;
 }
 
 function getJsonData($path) {
@@ -90,20 +96,17 @@ function getImageUrl($sf_id) {
 
 
 $dbconn = initConnection();
+
 // $sql->drop(['Sets', 'Cards']);
 
 // createTables("../database/models.json");
 
 // $sql->insert("Sets", ["setName"], ["Ikora"]);
 
-// $data = getJsonData("../test_data/test.json");
-// $sql->insert("Data", $data[0], $data[1]);
-
-
 
 // $result = $sql->fetchAll('Cards');
 
-uploadSet("../test_data/test.json", 1);
+uploadSet("../test_data/Ikora.json", 1);
 
 // print_r($result);
 pg_close($dbconn);
