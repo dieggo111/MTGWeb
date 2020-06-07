@@ -1,17 +1,83 @@
 {
-    "Test": {
-        "artist": "Me",
-        "colors": ["G", "R"],
-        "convertedManaCost": 5,
-        "manaCost": "{5}",
-        "name": "Monster",
-        "power": "0",
-        "rarity": "common",
-        "scryfallId": "d8a2e243-e446-46c6-8a37-e26620951c41",
-        "setId": 1,
-        "text": "Flash\nAdaptive Shimmerer enters the battlefield with three +1/+1 counters on",
-        "toughness": "0",
-        "type": "Creature - Insect",
-        "types": ["Creature"]
-    }
+    "cards": [
+        {
+            "artist": "Jason Felix",
+            "borderColor": "black",
+            "colorIdentity": [],
+            "colors": [],
+            "convertedManaCost": 5,
+            "edhrecRank": 19013,
+            "flavorText": "\"You sure you want to see what emerges? You might not like it. It definitely won''t like you.\"\n—Kinnan, bonder prodigy",
+            "frameVersion": "2015",
+            "hasFoil": true,
+            "hasNonFoil": true,
+            "isArena": true,
+            "isMtgo": true,
+            "isPaper": true,
+            "layout": "normal",
+            "legalities": {
+                "brawl": "Legal",
+                "commander": "Legal",
+                "duel": "Legal",
+                "future": "Legal",
+                "historic": "Legal",
+                "legacy": "Legal",
+                "modern": "Legal",
+                "pauper": "Legal",
+                "penny": "Legal",
+                "pioneer": "Legal",
+                "standard": "Legal",
+                "vintage": "Legal"
+            },
+            "manaCost": "{5}",
+            "mcmId": 455048,
+            "mcmMetaId": 301708,
+            "mtgArenaId": 71068,
+            "mtgoId": 80011,
+            "multiverseId": 479521,
+            "name": "Adaptive Shimmerer",
+            "number": "1",
+            "originalText": "Flash\nAdaptive Shimmerer enters the battlefield with three +1/+1 counters on it.",
+            "originalType": "Creature — Insect",
+            "power": "0",
+            "prices": {
+                "mtgo": {
+                    "2020-06-01": 0.01
+                },
+                "mtgoFoil": {
+                    "2020-06-01": 0.01
+                },
+                "paper": {
+                    "2020-05-31": 0.1
+                },
+                "paperFoil": {
+                    "2020-05-31": 0.2
+                }
+            },
+            "printings": [
+                "IKO"
+            ],
+            "purchaseUrls": {
+                "cardmarket": "https://mtgjson.com/links/7b667db41094a62d",
+                "tcgplayer": "https://mtgjson.com/links/69b5e4e972565ba6"
+            },
+            "rarity": "common",
+            "rulings": [],
+            "scryfallId": "d8a2e243-e446-46c6-8a37-e26620951c41",
+            "scryfallIllustrationId": "47af9ab9-8b99-4b8f-88eb-ad854eeca50a",
+            "scryfallOracleId": "8003ca2d-0c1d-47c1-bcd1-4609615c7a82",
+            "subtypes": [
+                "Insect"
+            ],
+            "supertypes": [],
+            "tcgplayerProductId": 212719,
+            "text": "Flash\nAdaptive Shimmerer enters the battlefield with three +1/+1 counters on it.",
+            "toughness": "0",
+            "type": "Creature — Insect",
+            "types": [
+                "Creature"
+            ],
+            "uuid": "feee1087-df1d-51e9-ace0-7afbe81aca01"
+        }
+    ]
 }

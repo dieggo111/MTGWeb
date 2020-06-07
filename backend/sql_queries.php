@@ -34,7 +34,7 @@ class SqlQueries
      * @param   string  $table      table name
      * @return  array   $result     table data converted into an array
      */
-    function fetchAll($table) {
+    public function fetchAll($table) {
         try {
             $result = pg_query("SELECT * FROM $table");
             if (!$result || is_null($result)) {
@@ -47,11 +47,32 @@ class SqlQueries
         }
     }
 
-    function fetch($table, $column) {
-        $query = "SELECT $column FROM $table";
-        $result = pg_query($query);
-        return $result;
+    public function fetchValue($table, $key, $value) {
+        try {
+            $result = pg_query("SELECT * FROM $table WHERE $key='$value'");
+                if (!$result || is_null($result)) {
+                return [];
+            }
+            return pg_fetch_all($result);
+        } catch (Exception $e) {
+            echo "Couldn't find anything...";
+            return [];
+        }
+    }
 
+
+    public function fetchColumns($table) {
+        $table = strtolower($table);
+        try {
+            $result = pg_query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table'");
+            if (!$result || is_null($result)) {
+                return [];
+            }
+            return $this->extractColumnNames(pg_fetch_all($result));
+        } catch (Exception $e) {
+            echo "Couldn't find anything...";
+            return [];
+        }
     }
 
     /**
@@ -67,6 +88,14 @@ class SqlQueries
             }
         }
         return $array;
+    }
+
+    private function extractColumnNames($column_schemas) {
+        $columns = [];
+        foreach ($column_schemas as $col) {
+            array_push($columns, $col["column_name"]);
+        }
+        return $columns;
     }
 
 }
