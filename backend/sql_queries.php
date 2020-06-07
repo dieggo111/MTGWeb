@@ -3,13 +3,12 @@
 
 class SqlQueries
 {
-    public function drop($table) {
-        if (is_array($table)) {
-            $tables = implode(",", $table);
-        } else {
-            $tables = $table;
+    public function drop($tables) {
+        foreach ($tables as $table) {
+            if (pg_query("DROP TABLE $table CASCADE")) {
+                echo "$table table succesfully dropped...\n";
+            }
         }
-        pg_query("DROP TABLE $tables CASCADE") or pg_last_error();
     }
 
     /**
@@ -23,9 +22,10 @@ class SqlQueries
         $columns = implode(",", $column_array);
         $values = implode("','", $this->convertArrays($value_array));
         $query = "INSERT INTO $table($columns) VALUES ('$values')";
-        echo "\n".$query."\n";
-        $result = pg_query($query) or pg_last_error();
-        return $result;
+        // echo "\n".$query."\n";
+        if (pg_query($query)) {
+            echo "Inserted data successfully...\n";
+        }
     }
 
     /**
@@ -50,13 +50,13 @@ class SqlQueries
     public function fetchValue($table, $key, $value) {
         try {
             $result = pg_query("SELECT * FROM $table WHERE $key='$value'");
-                if (!$result || is_null($result)) {
-                return [];
+            if (!pg_fetch_all($result) || is_null($result)) {
+                return array();
             }
             return pg_fetch_all($result);
         } catch (Exception $e) {
-            echo "Couldn't find anything...";
-            return [];
+            echo "Couldn't find table in database...\n";
+            return array();
         }
     }
 
@@ -70,7 +70,7 @@ class SqlQueries
             }
             return $this->extractColumnNames(pg_fetch_all($result));
         } catch (Exception $e) {
-            echo "Couldn't find anything...";
+            echo "Couldn't find table in database...\n";
             return [];
         }
     }

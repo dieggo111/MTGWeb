@@ -11,30 +11,42 @@ function initConnection() {
     return $dbconn;
 }
 
-function createTables() {
-    $models = json_decode(file_get_contents("../database/models.json"), true);
-
-    if (pg_query($models["Sets"])) {
-        echo "Set table succesfully created...\n";
-    }
-    if (pg_query($models["Cards"])) {
-        echo "Data table succesfully created...\n";
+function createTables($model_path) {
+    $models = json_decode(file_get_contents($model_path), true);
+    foreach ($models as $model_name => $model) {
+        echo $model_name;
+        if (pg_query($model)) {
+            echo "$model_name table succesfully created...\n";
+        }
     }
 }
 
-function uploadCards($path, $setId) {
+function uploadSet($path, $setId=null) {
+    if (is_null($setId)) {
+        $setId = $GLOBALS["sql"]->fetchValue(
+            "Sets", "setName", basename($path, ".json"));
+        }
+    if (empty($setId)) {
+        echo "Couldn't find set reference in database...\n";
+        return false;
+    }
+    if (is_array($setId)) {
+        $setId = $setId[0]["id"];
+    }
     $data = getJsonData($path)["cards"];
     $data = addCardProps($data, $setId);
     $data = adjustCardData($data);
-    // print_r($data);
     foreach ($data as $card) {
         $columns = array_keys($card);
         $values = array_values($card);
-        // print_r($columns);
         $GLOBALS["sql"]->insert("Cards", $columns, $values);
     }
 }
 
+/**
+ * Add the setId reference from 'Sets' table as well as image urls, which
+ * can be fetched from scryfall.com via the scryfallId.
+ */
 function addCardProps($data, $setId) {
     for ($i=0; $i<count($data); $i++) {
         $data[$i] = $data[$i] + array("setId" => $setId);
@@ -47,6 +59,9 @@ function addCardProps($data, $setId) {
     return $data;
 }
 
+/**
+ * Remove the redundant card information.
+ * */
 function adjustCardData($data) {
     $valid_columns = $GLOBALS["sql"]->fetchColumns('Cards');
     // print_r($valid_columns);
@@ -76,21 +91,19 @@ function getImageUrl($sf_id) {
 
 $dbconn = initConnection();
 // $sql->drop(['Sets', 'Cards']);
-// drop('Sets');
 
-// createTables();
-// $data = getJsonData("../test_data/test.json");
+// createTables("../database/models.json");
+
 // $sql->insert("Sets", ["setName"], ["Ikora"]);
+
+// $data = getJsonData("../test_data/test.json");
 // $sql->insert("Data", $data[0], $data[1]);
 
 
 
 // $result = $sql->fetchAll('Cards');
 
-// uploadCards(
-//     "../test_data/test.json",
-//     $sql->fetchValue("Sets", "setName", "Ikora")[0]["id"]
-// );
+uploadSet("../test_data/test.json", 1);
 
 // print_r($result);
 pg_close($dbconn);
