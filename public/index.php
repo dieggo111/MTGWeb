@@ -1,5 +1,7 @@
 <?php
 
+require $_SERVER['DOCUMENT_ROOT']."../src/cards_controller.php";
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET,POST");
@@ -52,7 +54,7 @@ if ($requestMethod == "POST") {
     var_dump($response);
 }
 // pass the request method and user ID to the PersonController and process the HTTP request:
-// $controller = new PersonController($dbConnection, $requestMethod, $userId);
+$API = new Api($requestMethod, $url["query"]);
 // $controller->processRequest();
 
 ?>
