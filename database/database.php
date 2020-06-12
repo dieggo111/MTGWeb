@@ -110,27 +110,3 @@ class Database {
 
 
 }
-
-require 'sql_queries.php';
-
-$SQL = new SqlQueries();
-
-$DB = new Database("../config/config.json");
-$DB->initConnection();
-
-$SQL->drop(['Sets', 'Cards']);
-
-$DB->createTables("../database/models.json");
-
-$SQL->insert("Sets", ["setName"], ["Ikora"]);
-
-
-// $result = $sql->fetchAll('Cards');
-
-$DB->uploadSet("../test_data/Ikora.json");
-
-// $result = $sql->fetchItems("Sets", ["setName"], ["Ikora"]);
-
-// print_r($result);
-$DB->closeConnection();
-?>
