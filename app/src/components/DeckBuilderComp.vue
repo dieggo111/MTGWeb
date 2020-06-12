@@ -7,7 +7,7 @@
 <script>
 
 export default {
-  name: 'DeckBuilderComp'
+  name: 'deckbuilder'
 }
 </script>
 

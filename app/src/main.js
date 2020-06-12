@@ -7,9 +7,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 
-import SearchComp from './components/SearchComp'
+import AdvancedSearchComp from './components/AdvancedSearchComp'
 import DeckBuilderComp from './components/DeckBuilderComp'
-import ResultsComp from './components/ResultsComp'
+import SearchComp from './components/SearchComp'
 import Index from './components/Index'
 
 Vue.use(BootstrapVue)
@@ -22,9 +22,9 @@ Vue.use(VueRouter);
 Vue.prototype.$eventBus = new Vue()
 
 const routes = [
-  { path: '/search', component: SearchComp},
-  { path: '/deckbuilder', component: DeckBuilderComp},
-  { path: '/results', component: ResultsComp, name: 'results', props: true},
+  { path: '/advancedsearch', component: AdvancedSearchComp, name: 'advancedsearch'},
+  { path: '/deckbuilder', component: DeckBuilderComp, name: 'deckbuilder'},
+  { path: '/search', component: SearchComp, name: 'search', props: true},
   { path: '/', component: Index, name: 'index'},
 ]
 

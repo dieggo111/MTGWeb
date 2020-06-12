@@ -19,7 +19,7 @@
             </b-button>
         </b-navbar-nav>
         <b-navbar-nav class="nav-items">
-            <b-nav-item href="/search">Advanced Search</b-nav-item>
+            <b-nav-item href="/advancedsearch">Advanced Search</b-nav-item>
             <b-nav-item href="/deckbuilder">Deck Builder</b-nav-item>
         </b-navbar-nav>
         </b-navbar>
@@ -42,24 +42,13 @@ export default {
     },
     methods:{
         searchCard() {
-            console.log(this.input)
-            fetch('http://localhost:8080/cards?type=Instant')
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res);
-                    this.searchResults = res;
-                    this.$router.push({
-                        name: 'results',
-                        params: {searchResults: res}
-                        }).catch(error => {
-                            console.log("Ignoring dublicate navigation");
-                            error;
-                        });
-                    }
-                )
-                .catch(error => {
-                    console.log(error)
-                })
+            this.$router.push({
+                            name: 'search',
+                            query: { name: this.input }
+            }).catch(error => {
+                console.log("Ignoring dublicate navigation");
+                error;
+            });
         },
         keydownSubmit(event) {
             if (event.which === 13) {
