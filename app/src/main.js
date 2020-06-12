@@ -24,8 +24,8 @@ Vue.prototype.$eventBus = new Vue()
 const routes = [
   { path: '/search', component: SearchComp},
   { path: '/deckbuilder', component: DeckBuilderComp},
-  { path: '/results', component: ResultsComp},
-  { path: '/', component: Index},
+  { path: '/results', component: ResultsComp, name: 'results', props: true},
+  { path: '/', component: Index, name: 'index'},
 ]
 
 const router = new VueRouter({

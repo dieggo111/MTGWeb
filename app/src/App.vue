@@ -24,7 +24,7 @@
         </b-navbar-nav>
         </b-navbar>
         <div class="content">
-        <router-view></router-view>
+            <router-view ></router-view>
         </div>
     </div>
 </template>
@@ -34,25 +34,32 @@
 
 export default {
     name: 'App',
-    data(){
+    data() {
         return{
             input: "",
+            searchResults: []
         };
     },
     methods:{
         searchCard() {
             console.log(this.input)
-            this.$router.push("/results")
-            // fetch('http://localhost:12345/items')
-            //     .then(res => res.json())
-            //     .then(res => {
-            //         this.$store.commit(
-            //             "setShopItems", this.addUtilityItems(res))
-            //         this.prepareCart(res)
-            //     })
-            //     .catch(error => {
-            //         console.log(error)
-            //     })
+            fetch('http://localhost:8080/cards?type=Instant')
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res);
+                    this.searchResults = res;
+                    this.$router.push({
+                        name: 'results',
+                        params: {searchResults: res}
+                        }).catch(error => {
+                            console.log("Ignoring dublicate navigation");
+                            error;
+                        });
+                    }
+                )
+                .catch(error => {
+                    console.log(error)
+                })
         },
         keydownSubmit(event) {
             if (event.which === 13) {
