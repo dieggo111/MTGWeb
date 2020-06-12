@@ -5,7 +5,6 @@ class SqlQueries
     public function drop($tables) {
         foreach ($tables as $table) {
             if (pg_query("DROP TABLE $table CASCADE")) {
-                echo "$table table succesfully dropped...\n";
                 error_log("$table table succesfully dropped...");
             }
         }
@@ -18,16 +17,15 @@ class SqlQueries
      * @param   array   $value_array    holds the values (value types must
      * comply with the specifed data types)
      */
-    public function insert($table, $column_array, $value_array, $debug) {
+    public function insert($table, $column_array, $value_array, $debug=false) {
         $columns = implode(",", $column_array);
         $values = implode("','", $this->convertArrays($value_array));
         $query = "INSERT INTO $table($columns) VALUES ('$values')";
-        if ($debug === True) {
+        if ($debug === true) {
             error_log($query);
-            echo $query."\n";
         }
         if (pg_query($query)) {
-            echo "Inserted data successfully...\n";
+            error_log("Inserted data successfully...");
         }
     }
 
@@ -45,7 +43,7 @@ class SqlQueries
             }
             return pg_fetch_all($result);
         } catch (Exception $e) {
-            echo "Couldn't find table in database...";
+            error_log("Couldn't find table in database...");
             return [];
         }
     }
@@ -74,14 +72,13 @@ class SqlQueries
             $result = pg_query($query);
                 if ($debug === True) {
                     error_log($query);
-                    print_r(pg_fetch_all($result));
                 }
             if ($this->handleInvalidRequest($result) === False) {
                 return array();
             }
             return pg_fetch_all($result);
         } catch (Exception $e) {
-            echo "Couldn't find table in database...\n";
+            error_log($e);
             return array();
         }
     }
@@ -97,7 +94,7 @@ class SqlQueries
             }
             return $this->extractColumnNames(pg_fetch_all($result));
         } catch (Exception $e) {
-            echo "Couldn't find table in database...\n";
+            error_log("Couldn't find table in database...");
             return [];
         }
     }

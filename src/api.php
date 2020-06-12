@@ -2,8 +2,7 @@
 
 
 require_once $_SERVER['DOCUMENT_ROOT'].'\..\src\sql_queries.php';
-// require $_SERVER['DOCUMENT_ROOT'].'\..\src\cards_controller.php';
-require $_SERVER['DOCUMENT_ROOT'].'\..\database\database.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'\..\database\database.php';
 
 class Api {
 
@@ -28,10 +27,10 @@ class Api {
     {
         switch ($this->requestMethod) {
             case 'GET':
-                if (is_null($this->query)) {
-                    $response = $this->unprocessableEntityResponse();
-                    break;
-                }
+                // if (is_null($this->query)) {
+                //     $response = $this->unprocessableEntityResponse();
+                //     break;
+                // }
                 if ($this->path == "/cards") {
                     $response = $this->getCards();
                 }
@@ -55,6 +54,12 @@ class Api {
 
     private function getCards()
     {
+        if (is_null($this->query)) {
+            $result = $this->sql->fetchAll("Cards");
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode($result);
+            return $response;
+        }
         $keys_values = $this->splitQuery();
         $result = $this->sql->fetchItems("Cards", $keys_values[0], $keys_values[1]);
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -64,6 +69,12 @@ class Api {
 
     private function getSets()
     {
+        if (is_null($this->query)) {
+            $result = $this->sql->fetchAll("Sets");
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode($result);
+            return $response;
+        }
         $keys_values = $this->splitQuery();
         $result = $this->sql->fetchItems("Sets", $keys_values[0], $keys_values[1]);
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -79,6 +90,9 @@ class Api {
 
     private function processQuery($query)
     {
+        if (is_null($query)) {
+            return $query;
+        }
         $query = str_replace(["+", "%20"], " ", $query);
         return $query;
     }

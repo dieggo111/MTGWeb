@@ -1,14 +1,18 @@
 <?php
 
+require_once __DIR__.'\..\src\sql_queries.php';
+
 class Database {
 
     private $credentials;
     public $dbconn;
+    private $sql;
 
     public function __construct($config_path)
     {
         $this->credentials = json_decode(
             file_get_contents($config_path), true)["database"];
+        $this->sql = new SqlQueries();
     }
 
     public function initConnection()
@@ -38,15 +42,15 @@ class Database {
 
     public function uploadSet($path, $setName=null) {
         if (is_null($setName)) {
-            $setId = $GLOBALS["sql"]->fetchItems(
+            $setname = $this->sql->fetchItems(
                 "Sets", ["setName"], [basename($path, ".json")]);
             }
-        if (empty($setId)) {
+        if (empty($setname)) {
             echo "Couldn't find set reference in database...\n";
             return false;
         }
-        if (is_array($setId)) {
-            $setId = $setId[0]["setname"];
+        if (is_array($setname)) {
+            $setId = $setname[0]["setname"];
         }
         $data = $this->getJsonData($path)["cards"];
         foreach ($data as $card) {
@@ -58,7 +62,7 @@ class Database {
             $card = $this->handleApostrophe($card);
             $columns = array_keys($card);
             $values = array_values($card);
-            $GLOBALS["sql"]->insert("Cards", $columns, $values);
+            $this->sql->insert("Cards", $columns, $values);
             echo $card["name"]."\n";
         }
     }
@@ -81,7 +85,7 @@ class Database {
      * Remove the redundant card information.
      * */
     private function purgeCardData($card) {
-        $valid_columns = $GLOBALS["sql"]->fetchColumns('Cards');
+        $valid_columns = $this->sql->fetchColumns('Cards');
         foreach(array_keys($card) as $key) {
             if (!in_array(strtolower($key), $valid_columns)) {
                 unset($card[$key]);

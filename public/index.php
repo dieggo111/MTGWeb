@@ -16,32 +16,9 @@ $url = parse_url($_SERVER['REQUEST_URI']);
 if (!in_array($url["path"], ['/cards', '/sets'])) {
     header("HTTP/1.1 404 Not Found");
 }
-// if (isset($url["path"])) {
-//     echo $url["path"];
-//     echo "\n";
-
-// }
-
-// if (isset($url["query"])) {
-//     echo $url["query"];
-//     echo "\n";
-// }
-// if (!isset($url["query"])) {
-//     $url["query"] = NULL;
-//     error_log("No query found...");
-// }
-
-
-// if ($requestMethod == "GET") {
-//     $response['status_code_header'] = 'HTTP/1.1 200 OK';
-//     $response['body'] = "Result of query...";
-//     var_dump($response);
-// }
-// if ($requestMethod == "POST") {
-//     $response['status_code_header'] = 'HTTP/1.1 200 OK';
-//     $response['body'] = "Result of query...";
-//     var_dump($response);
-// }
+if (!isset($url["query"])) {
+    $url["query"] = NULL;
+}
 
 // pass the request method and user ID to the PersonController and process the HTTP request:
 $API = new Api($_SERVER["REQUEST_METHOD"], $url["path"], $url["query"]);
