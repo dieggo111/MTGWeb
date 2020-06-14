@@ -3,7 +3,7 @@
         <div class="index_box">
             <p>This website lets you browse through magic cards. Currently features sets are:</p>
                 <div class="set-list" v-for="set in sets" :key="set.setname">
-                    - {{set.setname}}
+                    - <b>{{ set.setname }}</b>
                 </div>
             <p>
             <p>You might also want to check out the deck builder</p>
