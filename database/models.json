@@ -1,4 +1,6 @@
 {
     "Sets": "CREATE TABLE Sets(id SERIAL PRIMARY KEY, setName VARCHAR(64) NOT NULL UNIQUE)",
-    "Cards": "CREATE TABLE Cards(card_id SERIAL PRIMARY KEY, artist VARCHAR(64), additional_print BOOLEAN DEFAULT FALSE, colors CHAR[], convertedManaCost INTEGER, image_uri_normal VARCHAR(200), image_uri_small VARCHAR(200), manaCost VARCHAR(24), name VARCHAR(64), power CHAR(2), rarity VARCHAR(12), scryfallId VARCHAR(64), setName VARCHAR(64), text TEXT, toughness CHAR(2), type VARCHAR(64), types VARCHAR[], FOREIGN KEY (setName) REFERENCES Sets(setname) ON DELETE CASCADE)"
+    "Types": "CREATE TABLE Types(card_type_id SERIAL PRIMARY KEY, card_type VARCHAR[] NOT NULL UNIQUE)",
+    "Supertypes": "CREATE TABLE Supertypes(supertype_id SERIAL PRIMARY KEY, super_type VARCHAR[] NOT NULL UNIQUE)",
+    "Cards": "CREATE TABLE Cards(card_id SERIAL PRIMARY KEY, artist VARCHAR(64), additional_print BOOLEAN DEFAULT FALSE, colors CHAR[], convertedManaCost INTEGER, image_uri_normal VARCHAR(200), image_uri_small VARCHAR(200), manaCost VARCHAR(24), name VARCHAR(64), power CHAR(2), rarity VARCHAR(12), scryfallId VARCHAR(64), setName VARCHAR(64), supertypes VARCHAR[], text TEXT, toughness CHAR(2), type VARCHAR(64), types VARCHAR[], FOREIGN KEY (setName) REFERENCES Sets(setname) ON DELETE CASCADE, FOREIGN KEY (types) REFERENCES Types(card_type) ON DELETE CASCADE, FOREIGN KEY (supertypes) REFERENCES Supertypes(super_type) ON DELETE CASCADE)"
 }

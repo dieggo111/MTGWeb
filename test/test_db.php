@@ -7,18 +7,20 @@ $SQL = new SqlQueries();
 
 $DB = new Database("../config/config.json");
 $DB->initConnection();
+$RESULT = array();
 
-// $SQL->drop(['Sets', 'Cards']);
-
+// $SQL->drop(['Sets', 'Cards', 'Types', 'Supertypes']);
 // $DB->createTables("../database/models.json");
+$DB->createDefaultEntries("../database/default_values.json");
+// $DB->uploadSet("../test_data/Ikora.json");
 
-// $SQL->insert("Sets", ["setName"], ["Ikora"]);
+// $RESULT = $SQL->fetchAll("Supertypes", "super_type");
 
 
-$DB->uploadSet("../test_data/Ikora.json");
+// $result = $SQL->fetchItems("Cards", ["types"], ["{Artifact,Creature}"]);
 
-$result = $SQL->fetchItems("Cards", ["card_id"], [1]);
 
-print_r($result);
+
+print_r($RESULT);
 $DB->closeConnection();
 ?>

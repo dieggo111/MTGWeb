@@ -2,7 +2,8 @@
 
 class SqlQueries
 {
-    public function drop($tables) {
+    public function drop($tables)
+    {
         foreach ($tables as $table) {
             if (pg_query("DROP TABLE $table CASCADE")) {
                 error_log("$table table succesfully dropped...");
@@ -17,7 +18,8 @@ class SqlQueries
      * @param   array   $value_array    holds the values (value types must
      * comply with the specifed data types)
      */
-    public function insert($table, $column_array, $value_array, $debug=false) {
+    public function insert($table, $column_array, $value_array, $debug=false)
+    {
         $columns = implode(",", $column_array);
         $values = implode("','", $this->convertArrays($value_array));
         $query = "INSERT INTO $table($columns) VALUES ('$values')";
@@ -29,15 +31,33 @@ class SqlQueries
         }
     }
 
+    public function insertMany($table, $column, $value_array, $debug=false)
+    {
+        $query = "INSERT INTO $table ($column) VALUES";
+        foreach ($value_array as $value) {
+            $query = $query." ('$value'),";
+        }
+        $query = substr($query, 0, -1);
+        if ($debug === true) {
+            error_log($query);
+        }
+        if (pg_query($query)) {
+            error_log("Inserted data successfully...");
+        }
+    }
+
     /**
-     * Fetches all data from specified table. Returns an empty array if nothing
-     * was found.
+     * Fetches all data from specified table (and column). Returns an empty
+     * array if nothing was found.
      * @param   string  $table      table name
+     * @param   string  $column     specifies the column from which data
+     *                              should be fetched
      * @return  array   $result     table data converted into an array
      */
-    public function fetchAll($table) {
+    public function fetchAll($table, $column="*")
+    {
         try {
-            $result = pg_query("SELECT * FROM $table");
+            $result = pg_query("SELECT $column FROM $table");
             if ($this->handleInvalidRequest($result) === False) {
                 return array();
             }
@@ -56,9 +76,11 @@ class SqlQueries
      * @param   string  $table          table name
      * @param   array   $key_array      array containing one/multiple column name(s)
      * @param   string  $value_array    array containing one/multiple values
-     * @return  array   $result     table data converted into an array
+     * @param   boolean $debug          Enable/disable debug logs
+     * @return  array   $result         table data converted into an array
      *  */
-    public function fetchItems($table, $key_array, $value_array, $debug=False) {
+    public function fetchItems($table, $key_array, $value_array, $debug=False)
+    {
         try {
             if (count($key_array) != count($value_array)) {
                 throw new Exception("Number of array elements differs");
@@ -84,7 +106,8 @@ class SqlQueries
     }
 
 
-    public function fetchColumns($table) {
+    public function fetchColumns($table)
+    {
         $table = strtolower($table);
         try {
             $result = pg_query("SELECT * FROM INFORMATION_SCHEMA.COLUMNS
@@ -105,7 +128,8 @@ class SqlQueries
      * @param   array   $array      initial array
      * @return  array   $array      converted array
      */
-    private function convertArrays($array) {
+    private function convertArrays($array)
+    {
         for($i=0; $i<count($array); $i++) {
             if (is_array($array[$i])) {
                 $array[$i] = '{'.implode(",", $array[$i]).'}';
@@ -114,7 +138,8 @@ class SqlQueries
         return $array;
     }
 
-    private function extractColumnNames($column_schemas) {
+    private function extractColumnNames($column_schemas)
+    {
         $columns = [];
         foreach ($column_schemas as $col) {
             array_push($columns, $col["column_name"]);

@@ -30,7 +30,8 @@ class Database {
         pg_close($this->dbconn);
     }
 
-    public function createTables($model_path) {
+    public function createTables($model_path)
+    {
         $models = json_decode(file_get_contents($model_path), true);
         foreach ($models as $model_name => $model) {
             echo $model_name;
@@ -40,7 +41,20 @@ class Database {
         }
     }
 
-    public function uploadSet($path, $setName=null) {
+    public function createDefaultEntries($path)
+    {
+        $defaultValues = json_decode(file_get_contents($path), true);
+        $this->sql->insert("Sets", ["setName"], $defaultValues["Sets"]);
+        $this->sql->insertMany(
+            "Supertypes",
+            "super_type",
+            $defaultValues["Supertypes"]
+            );
+        $this->sql->insertMany("Types", "card_type", $defaultValues["Types"]);
+    }
+
+    public function uploadSet($path, $setName=null)
+    {
         if (is_null($setName)) {
             $setname = $this->sql->fetchItems(
                 "Sets", ["setName"], [basename($path, ".json")]);

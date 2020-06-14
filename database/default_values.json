@@ -1,0 +1,23 @@
+{
+    "Sets": [
+        "Ikoria - Lair of Behemoths",
+        "Theros Beyond Death",
+        "Throne of Eldraine"
+    ],
+    "Supertypes": [
+        "{Legendary}",
+        "{}",
+        "{Basic}"
+    ],
+    "Types": [
+        "{Creature}",
+        "{Sorcery}",
+        "{Land}",
+        "{Instant}",
+        "{Enchantment}",
+        "{Planeswalker}",
+        "{Artifact}",
+        "{Artifact,Creature}",
+        "{Enchantment,Creature}"
+    ]
+}
