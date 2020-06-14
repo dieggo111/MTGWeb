@@ -189,6 +189,6 @@ export default {
 
 <style lang="sass" scoped>
 @import '../styles/_styles.sass'
-td
-    margin-top: 20px
+tr
+    margin-top: 100px
 </style>
