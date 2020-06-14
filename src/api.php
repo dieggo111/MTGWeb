@@ -37,10 +37,16 @@ class Api {
                 if ($this->path == "/sets") {
                     $response = $this->getSets();
                 }
+                if ($this->path == "/types") {
+                    $response = $this->getTypes();
+                }
+                if ($this->path == "/supertypes") {
+                    $response = $this->getSupertypes();
+                }
                 break;
             case 'POST':
                 if ($this->path == "/cards") {
-                    $response = $this->postCard();
+                    $response = $this->insertCard();
                 }
                 break;
             default:
@@ -70,7 +76,8 @@ class Api {
     private function getSets()
     {
         if (is_null($this->query)) {
-            $result = $this->sql->fetchAll("Sets");
+            $result = $this->sql->fetchAll("Sets", "setName");
+            $result = $this->arrayToList($result, "setname");
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
             $response['body'] = json_encode($result);
             return $response;
@@ -82,7 +89,41 @@ class Api {
         return $response;
     }
 
-    private function postCard()
+    private function getTypes()
+    {
+        if (is_null($this->query)) {
+            $result = $this->sql->fetchAll("Types", "card_type");
+            $result = $this->arrayToList($result, "card_type");
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode($result);
+            return $response;
+        }
+        $keys_values = $this->splitQuery();
+        $result = $this->sql->fetchItems("Types", $keys_values[0], $keys_values[1]);
+        $response['status_code_header'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode($result);
+        return $response;
+
+    }
+
+    private function getSupertypes()
+    {
+        if (is_null($this->query)) {
+            $result = $this->sql->fetchAll("Supertypes", "super_type");
+            $result = $this->arrayToList($result, "super_type");
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode($result);
+            return $response;
+        }
+        $keys_values = $this->splitQuery();
+        $result = $this->sql->fetchItems("Supertypes", $keys_values[0], $keys_values[1]);
+        $response['status_code_header'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode($result);
+        return $response;
+
+    }
+
+    private function insertCard()
     {
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
         $response['body'] = json_encode($this->query);
@@ -123,6 +164,15 @@ class Api {
         $response['status_code_header'] = 'HTTP/1.1 404 Not Found';
         $response['body'] = null;
         return $response;
+    }
+
+    private function arrayToList($array, $key)
+    {
+        $list = Array();
+        foreach ($array as $nested_array) {
+            array_push($list, $nested_array[$key]);
+        }
+        return $list;
     }
 }
 

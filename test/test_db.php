@@ -11,10 +11,11 @@ $RESULT = array();
 
 // $SQL->drop(['Sets', 'Cards', 'Types', 'Supertypes']);
 // $DB->createTables("../database/models.json");
-$DB->createDefaultEntries("../database/default_values.json");
-// $DB->uploadSet("../test_data/Ikora.json");
+// $DB->createDefaultEntries("../database/default_values.json");
+// $DB->uploadSet("../test_data/Ikoria - Lair of Behemoths.json");
 
-// $RESULT = $SQL->fetchAll("Supertypes", "super_type");
+// $RESULT = $SQL->fetchAll("Types", "card_type");
+// $RESULT = $SQL->fetchAll("Supertypes");
 
 
 // $result = $SQL->fetchItems("Cards", ["types"], ["{Artifact,Creature}"]);

@@ -44,13 +44,21 @@ class Database {
     public function createDefaultEntries($path)
     {
         $defaultValues = json_decode(file_get_contents($path), true);
-        $this->sql->insert("Sets", ["setName"], $defaultValues["Sets"]);
+        $this->sql->insertMany(
+            "Sets",
+            "setName",
+            $defaultValues["Sets"]
+        );
         $this->sql->insertMany(
             "Supertypes",
             "super_type",
-            $defaultValues["Supertypes"]
+            $defaultValues["Supertypes"], true
             );
-        $this->sql->insertMany("Types", "card_type", $defaultValues["Types"]);
+        $this->sql->insertMany(
+            "Types",
+            "card_type",
+            $defaultValues["Types"]
+        );
     }
 
     public function uploadSet($path, $setName=null)
