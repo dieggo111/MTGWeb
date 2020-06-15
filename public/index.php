@@ -15,6 +15,7 @@ $url = parse_url($_SERVER['REQUEST_URI']);
 // the only valid endpoint for card searches starts with /card
 if (!in_array($url["path"], ['/cards', '/sets', '/types', '/supertypes'])) {
     header("HTTP/1.1 404 Not Found");
+    exit();
 }
 if (!isset($url["query"])) {
     $url["query"] = NULL;
