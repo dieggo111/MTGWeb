@@ -3,51 +3,59 @@
         <!-- <header><h3>Search Results</h3></header> -->
         <b-container class="search-toolbar">
             <b-row>
-                <b-col>
-                    <div class="search-options">
-                        <b-button-group size="sm" class="mr-1">
-                            <b-container class="m-md-2">
-                                Display option:
-                            </b-container>
-                            <b-dropdown
-                                    id="display-opt-dropdown"
-                                    :text="getDisplayOption"
-                                    class="m-md-2">
-                                <b-dropdown-item
-                                        @click="changeDisplayOption(option)"
-                                        :v-bind="displayOptions"
-                                        v-for="option in displayOptions"
-                                        :key="option">
-                                    {{ option }}
-                                </b-dropdown-item>
-                            </b-dropdown>
-                            <b-container class="m-md-2">
-                                Sort by:
-                            </b-container>
-                            <b-dropdown
-                                    id="display-opt-dropdown"
-                                    :text="getSortOption"
-                                    class="m-md-2">
-                                <b-dropdown-item
-                                        @click="changeSortOption(option)"
-                                        :v-bind="sortOptions"
-                                        v-for="option in sortOptions"
-                                        :key="option">
-                                    {{ option }}
-                                </b-dropdown-item>
-                            </b-dropdown>
-                        </b-button-group>
-                    </div>
+                <b-col cols="4">
+                    <!-- <div class="search-options"> -->
+                        <!-- <b-button-group size="sm" class="mr-1"> -->
+                        <b-container class="mt-2">
+                            Display option:
+                        </b-container>
+                <!-- </b-col>
+                <b-col cols="2"> -->
+                        <b-dropdown
+                                id="display-opt-dropdown"
+                                :text="getDisplayOption"
+                                class="m-md-3">
+                            <b-dropdown-item
+                                    @click="changeDisplayOption(option)"
+                                    :v-bind="displayOptions"
+                                    v-for="option in displayOptions"
+                                    :key="option">
+                                {{ option }}
+                            </b-dropdown-item>
+                        </b-dropdown>
                 </b-col>
-                <b-col>
+                <b-col cols="4">
+                        <b-container class="mt-2">
+                            Sort by:
+                        </b-container>
+                <!-- </b-col>
+                <b-col cols="2"> -->
+                        <b-dropdown
+                                id="sort-opt-dropdown"
+                                :text="getSortOption"
+                                class="m-md-3">
+                            <b-dropdown-item
+                                    @click="changeSortOption(option)"
+                                    :v-bind="sortOptions"
+                                    v-for="option in sortOptions"
+                                    :key="option">
+                                {{ option }}
+                            </b-dropdown-item>
+                        </b-dropdown>
+                        <!-- </b-button-group> -->
+                    <!-- </div> -->
+                </b-col>
+                <!-- <b-col cols="3"> -->
+                <!-- </b-col> -->
+                <b-col cols="4">
                     <div class="search-navigation">
                         <b-pagination
-                                class="m-md-2"
+                                class="mt-5"
                                 v-model="currentPage"
-                                :total-rows="rows"
+                                :total-rows="getPaginationRows"
                                 :per-page="perPage"
-                                first-number
-                                last-number>
+                                :items="searchResults"
+                                limit="3">
                         </b-pagination>
                     </div>
                 </b-col>
@@ -56,14 +64,15 @@
 
         <div v-if="searchResults.length >= 1">
             <div v-if="getDisplayOption == 'Row'">
-                <!-- <b-table :items="searchResults" thead-class="hidden_header"> -->
-                <b-table :fields="fields" :items="searchResults">
+                <b-table :fields="fields" :items="searchResults.slice(perPage*(currentPage-1), perPage*currentPage)">
+                    <template v-slot:cell(manacost)="{ item }">
+                        <div v-html="getManaSymbols(item.manacost)"></div>
+                    </template>
                 </b-table>
             </div>
             <div v-else>
-                <div class="results" v-for="result in searchResults" :key="result.card_id">
+                <div class="results" v-for="result in searchResults.slice(10*(currentPage-1), 10*currentPage)" :key="result.card_id">
                     <CardComp :result="result" :displayOption="getDisplayOption"></CardComp>
-                    <!-- <img class="result-img" :src="result.image_uri_normal" /> -->
                 </div>
             </div>
         </div>
@@ -86,13 +95,13 @@ export default {
     },
     data() {
         return{
-            fields: ["name", "colors"],
-            sortOptions: ["Name", "Rarity", "Color", "Manacost"],
+            fields: ["name", "manacost", "rarity", "convertedmanacost", "types"],
+            sortOptions: ["Name", "Rarity", "Conv. Manacost", "Types"],
             sortOptionDict: {
                 "Name": true,
                 "Rarity": false,
-                "Color": false,
-                "Manacost": false
+                "Conv. Manacost": false,
+                "Types": false
             },
             displayOptions: ["Card", "Row", "Detail"],
             displayOptionDict: {
@@ -103,7 +112,12 @@ export default {
             searchResults: [],
             rows: 10,
             perPage: 10,
-            currentPage: 1
+            currentPage: 1,
+            blackImage: '../assets/black_trans.png',
+            whiteImage: '../assets/white_trans.png',
+            greenImage: '../assets/green_trans.png',
+            redImage: '../assets/red_trans.png',
+            blueImage: '../assets/blue_trans.png'
         };
     },
     computed: {
@@ -122,11 +136,15 @@ export default {
                 }
             }
             return "";
-        }
+        },
+        getPaginationRows() {
+            return this.searchResults.length
+      }
     },
     methods: {
         searchCard() {
-            fetch('http://localhost:8000/cards?name='.concat(this.$route.query.name))
+            console.log(this.$route.fullPath.split("?")[1])
+            fetch('http://localhost:8000/cards?' + this.$route.fullPath.split("?")[1])
             .then(res => res.json())
             .then(res => {
                 console.log(res);
@@ -157,7 +175,21 @@ export default {
                     this.sortOptionDict[key] = false;
                 }
             }
+        },
+        getManaSymbols(manacost) {
+        //     console.log(manacost)
+            var statement = String()
+            statement = manacost
+        //     if (manacost.includes("{R}")) {
+        //         statement += '<img class="mana-thumbnail" src="../assets/red_trans.png" />'
+        //     }
+            // if (manacost.includes("{W}")) {
+            //     return statement += '<img class="mana-thumbnail" :src="whiteImage" />'
+            // }
+            // console.log(statement)
+        return statement
         }
+
 
     }
 }

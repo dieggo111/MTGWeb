@@ -1,13 +1,15 @@
 <template>
     <div class="adv-search-box">
-        <header><h3>Advanced Search</h3></header>
+        <!-- <header><h3>Advanced Search</h3></header> -->
         <body>
             <table class="adv-search-table">
                 <tr>
-                    <td>Set</td>
+                    <td class="first-col">Set</td>
                     <td>
                         <template>
-                            <b-form-tags :input-attrs="{ list: 'set-list' }">
+                            <b-form-tags
+                                    :input-attrs="{ list: 'set-list' }"
+                                    v-model="selectedSets">
                             </b-form-tags>
                             <b-form-datalist id="set-list" :options="sets">
                             </b-form-datalist>
@@ -15,7 +17,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Colors</td>
+                    <td class="first-col">Colors</td>
                     <td><b-button
                             class="color-btn"
                             id="black-btn"
@@ -54,20 +56,22 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Rarity</td>
+                    <td class="first-col">Rarity</td>
                     <td><b-form-group>
                             <b-form-checkbox-group id="checkbox-group-1"
-                                    v-model="selectedType"
+                                    v-model="selectedRarities"
                                     :options="options"
                                     name="flavour-1"/>
                         </b-form-group>
                     </td>
                 </tr>
                 <tr>
-                    <td>Card Type</td>
+                    <td class="first-col">Card Type</td>
                     <td>
                         <template>
-                            <b-form-tags :input-attrs="{ list: 'types-list' }">
+                            <b-form-tags
+                                    :input-attrs="{ list: 'types-list' }"
+                                    v-model="selectedTypes">
                             </b-form-tags>
                             <b-form-datalist id="types-list" :options="getTypes('types')">
                             </b-form-datalist>
@@ -75,6 +79,9 @@
                     </td>
                 </tr>
             </table>
+            <div>
+                <b-button class="mt-5" block @click="goAdvSearch">Search Card</b-button>
+            </div>
         </body>
     </div>
 </template>
@@ -88,9 +95,10 @@ export default {
     data() {
         return{
             tagsOptions: ["awdaw", "awdawda"],
-            selectedType: [],
+            selectedTypes: [],
+            selectedRarities: [],
+            selectedSets: [],
             options: ['Common', 'Uncommon', 'Rare', 'Mythic Rare'],
-            selectedSet: "",
             selectedColors: {
                 "black": false,
                 "white": false,
@@ -115,14 +123,25 @@ export default {
         this.searchSuperTypes();
     },
     computed:{
-        showSet() {
-            if (this.selectedSet == "") {
-                return "Select Set";
-            }
-            return this.selectedSet;
-        },
     },
     methods:{
+        goAdvSearch() {
+            console.log(this.selectedColors)
+            console.log(this.selectedRarities)
+            console.log(this.selectedTypes)
+            console.log(this.selectedSets)
+            this.$router.push({
+                            name: 'search',
+                            query: {
+                                types: this.selectedTypes,
+                                rarity: this.selectedRarities,
+                                colors: this.getColors(this.selectedColors)
+                            }
+            }).catch(error => {
+                console.log("Ignoring dublicate navigation");
+                error;
+            });
+        },
         searchSets() {
             fetch('http://localhost:8000/sets')
                 .then(res => res.json())
@@ -181,6 +200,9 @@ export default {
                 array[i] = array[i].replace(",", " ");
             }
             return array;
+        },
+        getColors(colorObject) {
+            return Object.keys(colorObject).filter(key => colorObject[key])
         }
     }
 }
@@ -189,6 +211,4 @@ export default {
 
 <style lang="sass" scoped>
 @import '../styles/_styles.sass'
-tr
-    margin-top: 100px
 </style>

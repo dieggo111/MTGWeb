@@ -1,12 +1,15 @@
 $box-width: 500px
 $box-border: 1px solid DarkGray
-
+$box-margin-top: 50px
 // hr
 //     boarder: 2px solid #626060
 
 // h2
 //     margin-top: 80px
 //     margin-bottom: 20px
+
+
+
 
 .nav-search-form
     margin-left: 100px
@@ -20,13 +23,25 @@ $box-border: 1px solid DarkGray
 .navbar
     margin-bottom: 100px
 
+
+//index
+
+.index-box
+    margin: auto
+    margin-top: $box-margin-top
+    width: $box-width
+.index-about-box
+    margin-bottom: $box-margin-top
+
+
 //AdvancedSearchComp
 
-// .adv-search-box
-//     width: 80%
-//     margin: auto
-
-
+.adv-search-box
+    margin-top: $box-margin-top
+.first-col
+    width: 30%
+    padding-bottom: 40px
+    padding-top: 40px
 .rounded-image
     border-radius: 50%
     width: 50px
@@ -35,7 +50,6 @@ $box-border: 1px solid DarkGray
     // width: 40px
     // height: 40px
     // object-fit: cover
-
 .color-btn
     border-radius: 50%
     margin-left: 10px
@@ -43,19 +57,14 @@ $box-border: 1px solid DarkGray
     padding: 0px
     border: $box-border
     outline: none
-
 #black-btn
     background-color: #696969
-
 #white-btn
     background-color: #e3e694
-
 #red-btn
     background-color: #dc0909
-
 #green-btn
     background-color: #00661a
-
 #blue-btn
     background-color: #0025fa
 
@@ -66,26 +75,41 @@ $box-border: 1px solid DarkGray
 
 
 //SearchComp
+
 .search-toolbar
     border: 1px solid DarkGray
     margin-bottom: 20px
 
-.search-options
-    float: left
+// .search-options
+//     float: left
 
-.search-navigation
-    float: right
+// .search-navigation
+//     float: right
+
+#display-opt-dropdown
+    // padding: 10px
+    // margin-right: 20px
+    width: 100%
+
+#sort-opt-dropdown
+    // padding: 10px
+    width: 100%
+
+.mana-thumbnail
+    border-radius: 50%
+    width: 20px
+    height: 20px
+
 
 //CardComp
 .card-img
     width: 250px
-
 .detail-box
     border: $box-border
-
+.image-box
+    margin-bottom: 20px
 .detail-infos
     float: right
-
 .detail-card-img
     width: 250px
     float: left

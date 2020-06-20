@@ -3,14 +3,19 @@
         <b-navbar class="navbar" fixed="top" variant="info" type="dark">
         <b-navbar-brand tag="h1" class="mb-0" href="/">MTG Web</b-navbar-brand>
         <b-navbar-nav class="nav-search-form">
-            <b-form-input
-                    @keydown.native="keydownSubmit"
-                    v-model="input"
-                    size="sm"
-                    class="mr-sm-2"
-                    placeholder="Card Name">
-                <span class="glyphicon glyphicon-search"></span>
-            </b-form-input>
+            <b-input-group>
+                <!-- <b-input-group-prepend>
+                    <span class="glyphicon glyphicon-search"></span>
+                </b-input-group-prepend> -->
+                <b-form-input
+                        @keydown.native="keydownSubmit"
+                        v-model="input"
+                        size="sm"
+                        class="mr-sm-2"
+                        placeholder="Card Name">
+                    <!-- <span class="glyphicon glyphicon-search"></span> -->
+                </b-form-input>
+            </b-input-group>
             <b-button
                     @click="goSearch"
                     size="sm"

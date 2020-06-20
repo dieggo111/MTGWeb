@@ -1,12 +1,19 @@
 <template>
     <body>
-        <div class="index_box">
-            <p>This website lets you browse through magic cards. Currently features sets are:</p>
-                <div class="set-list" v-for="set in sets" :key="set.setname">
-                    - <b>{{ set.setname }}</b>
-                </div>
-            <p>
-            <p>You might also want to check out the deck builder</p>
+        <div class="index-box">
+            <div class="index-about-box">
+                <h2>About MTG Web</h2>
+                    <p>This website lets you browse through magic cards. Currently features sets are:</p>
+                        <div class="set-list" v-for="set in sets" :key="set">
+                            - <b>{{ set }}</b>
+                        </div>
+            </div>
+            <div class="index-deckbuilder-box">
+                <h2>Deck Builder</h2>
+                    <p>While browsing through cards, you can add them to your
+                    personal deck list. Check and edit your deck list in the
+                    <b>deck builder</b> section.</p>
+            </div>
         </div>
     </body>
 </template>
