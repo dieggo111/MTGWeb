@@ -1,5 +1,7 @@
 <?php
 
+require_once $_SERVER['DOCUMENT_ROOT'].'/../src/logger.php';
+
 class SqlQueries
 {
     public function drop($tables)

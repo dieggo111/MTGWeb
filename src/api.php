@@ -1,8 +1,9 @@
 <?php
 
 
-require_once $_SERVER['DOCUMENT_ROOT'].'\..\src\sql_queries.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'\..\database\database.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/../src/sql_queries.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/../database/database.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/../src/logger.php';
 
 class Api {
 
@@ -11,6 +12,7 @@ class Api {
     private $query;
     private $sql;
     private $path;
+    private $log;
 
     public function __construct($requestMethod, $path, $query)
     {
@@ -20,7 +22,8 @@ class Api {
         $this->query = $this->processQuery($query);
         $this->sql = new SqlQueries();
         $this->path = $path;
-        // $this->cardsController = new CardsController();
+        $this->log = new Logger("../config/config.json");
+        $this->logPath = $this->log->initLogFile("MTGWeb Server Logs ".date('Y-m-d')."\n");
     }
 
     public function processRequest()
@@ -174,6 +177,7 @@ class Api {
         }
         return $list;
     }
+
 }
 
 ?>

@@ -4,5 +4,9 @@
         "port": "5432",
         "user": "postgres",
         "password": "root"
+    },
+    "logging": {
+        "basepath": "../logs/",
+        "basename": "mtgweb_server_log_"
     }
 }
