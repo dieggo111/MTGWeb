@@ -11,19 +11,20 @@ class Api {
     private $requestMethod;
     private $query;
     private $sql;
-    private $path;
+    private $url_path;
     private $log;
 
-    public function __construct($requestMethod, $path, $query)
+    public function __construct($requestMethod, $url_path, $query)
     {
         $this->db = new Database("../config/config.json");
         $this->db->initConnection();
         $this->requestMethod = $requestMethod;
         $this->query = $this->processQuery($query);
         $this->sql = new SqlQueries();
-        $this->path = $path;
+        $this->url_path = $url_path;
         $this->log = new Logger("../config/config.json");
-        $this->logPath = $this->log->initLogFile("MTGWeb Server Logs ".date('Y-m-d')."\n");
+        $this->log->header->setHeader("MTGWeb Server Logs");
+        // $this->log->log(["%level%" => "INFO", "%datetime%" => date('H:i:s:u'), "%log%" => "loggggggggggg"]);
     }
 
     public function processRequest()
@@ -34,21 +35,21 @@ class Api {
                 //     $response = $this->unprocessableEntityResponse();
                 //     break;
                 // }
-                if ($this->path == "/cards") {
+                if ($this->url_path == "/cards") {
                     $response = $this->getCards();
                 }
-                if ($this->path == "/sets") {
+                if ($this->url_path == "/sets") {
                     $response = $this->getSets();
                 }
-                if ($this->path == "/types") {
+                if ($this->url_path == "/types") {
                     $response = $this->getTypes();
                 }
-                if ($this->path == "/supertypes") {
+                if ($this->url_path == "/supertypes") {
                     $response = $this->getSupertypes();
                 }
                 break;
             case 'POST':
-                if ($this->path == "/cards") {
+                if ($this->url_path == "/cards") {
                     $response = $this->insertCard();
                 }
                 break;
