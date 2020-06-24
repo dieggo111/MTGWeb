@@ -127,14 +127,13 @@ export default {
     methods:{
         goAdvSearch() {
             console.log(this.selectedColors)
-            console.log(this.selectedRarities)
             console.log(this.selectedTypes)
             console.log(this.selectedSets)
             this.$router.push({
                             name: 'search',
                             query: {
                                 types: this.selectedTypes,
-                                rarity: this.selectedRarities,
+                                rarity: this.lowerCase(this.selectedRarities),
                                 colors: this.getColors(this.selectedColors)
                             }
             }).catch(error => {
@@ -202,7 +201,13 @@ export default {
             return array;
         },
         getColors(colorObject) {
-            return Object.keys(colorObject).filter(key => colorObject[key])
+            return Object.keys(colorObject).filter(key => colorObject[key]);
+        },
+        lowerCase(array) {
+            for (let i=0; i<array.length; i++) {
+                array[i] = array[i].toLowerCase();
+            }
+            return array;
         }
     }
 }
