@@ -71,7 +71,7 @@ class Api {
             return $response;
         }
         $keys_values = $this->splitQuery();
-        $result = $this->sql->fetchItems("Cards", $keys_values[0], $keys_values[1]);
+        $result = $this->sql->fetchItems("Cards", $keys_values[0], $keys_values[1], true);
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
         $response['body'] = json_encode($result);
         return $response;
@@ -148,8 +148,22 @@ class Api {
         $value_array = array();
         foreach (explode("&", $this->query) as $key_val_pair) {
             $exploded = explode("=", $key_val_pair);
-            array_push($key_array, $exploded[0]);
-            array_push($value_array, $exploded[1]);
+            $idx = array_search($exploded[0], $key_array, true);
+            // print_r($exploded);
+            // print_r($key_array);
+            // var_dump($idx);
+            // echo "\n";
+            if ($idx !== false) {
+                // print_r(gettype($value_array[$idx]));
+                if (gettype($value_array[$idx]) == "array") {
+                    array_push($value_array[$idx], $exploded[1]);
+                } else {
+                    $value_array[$idx] = [$value_array[$idx], $exploded[1]];
+                }
+            } else {
+                array_push($key_array, $exploded[0]);
+                array_push($value_array, $exploded[1]);
+            }
         }
         return [$key_array, $value_array];
     }

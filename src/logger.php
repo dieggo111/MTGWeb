@@ -150,7 +150,7 @@ class Header {
     public function setHeader(string $header="Server Log ")
     {
         $this->header = $header;
-        error_log("Set log file header to: $header");
+        // error_log("Set log file header to: $header");
     }
 
     public function setAppenDate(bool $append_date)

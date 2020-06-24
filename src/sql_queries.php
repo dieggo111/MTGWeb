@@ -81,18 +81,29 @@ class SqlQueries
      * @param   boolean $debug          Enable/disable debug logs
      * @return  array   $result         table data converted into an array
      *  */
-    public function fetchItems($table, $key_array, $value_array, $debug=False)
-    {
+    public function fetchItems(
+        string $table,
+        array $key_array,
+        array $value_array,
+        bool $debug=False
+    ) {
         try {
             if (count($key_array) != count($value_array)) {
                 throw new Exception("Number of array elements differs");
             }
-            $query = "SELECT * FROM $table WHERE $key_array[0]='$value_array[0]'";
-            if (count($key_array) > 1) {
-                for ($i=1; $i<count($key_array); $i++) {
-                    $query = $query." AND $key_array[$i]='$value_array[$i]'";
+            $query = "SELECT * FROM $table WHERE ";
+            for ($i=0; $i<count($key_array); $i++) {
+                if (gettype($value_array[$i]) != "array") {
+                    $query = $query."$key_array[$i]='$value_array[$i]'";
+                } else {
+                    $imploded_values = implode("','", $value_array[$i]);
+                    $query = $query."$key_array[$i] IN ('$imploded_values')";
+                }
+                if ($i != count($key_array)-1) {
+                    $query = $query." AND ";
                 }
             }
+            // print_r($value_array);
             $result = pg_query($query);
                 if ($debug === True) {
                     error_log($query);
