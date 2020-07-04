@@ -72,14 +72,14 @@ class Database {
             return false;
         }
         if (is_array($setname)) {
-            $setId = $setname[0]["setname"];
+            $setname = $setname[0]["setname"];
         }
         $data = $this->getJsonData($path)["cards"];
         foreach ($data as $card) {
             if (isset($card["frameEffect"]) || isset($card["flavorName"])) {
                 $card = $card + array("additional_print" => "true");
             }
-            $card = $this->addCardProps($card, $setId);
+            $card = $this->addCardProps($card, $setname);
             $card = $this->purgeCardData($card);
             $card = $this->handleApostrophe($card);
             $columns = array_keys($card);
@@ -93,8 +93,8 @@ class Database {
      * Add the setId reference from 'Sets' table as well as image urls, which
      * can be fetched from 'scryfall.com' via the 'scryfallId'.
      */
-    private function addCardProps($card, $setId) {
-        $card = $card + array("setId" => $setId);
+    private function addCardProps($card, $setname) {
+        $card = $card + array("setname" => $setname);
         $images = $this->getImageUrl(
             "https://api.scryfall.com/cards/".$card["scryfallId"]
         );

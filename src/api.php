@@ -20,11 +20,11 @@ class Api {
         $this->db->initConnection();
         $this->requestMethod = $requestMethod;
         $this->query = $this->processQuery($query);
-        $this->sql = new SqlQueries();
+        $this->sql = new SqlQueries($this->getArrayFields());
         $this->url_path = $url_path;
         $this->log = new Logger("../config/config.json");
         $this->log->header->setHeader("MTGWeb Server Logs");
-        // $this->log->log(["%level%" => "INFO", "%datetime%" => date('H:i:s:u'), "%log%" => "loggggggggggg"]);
+        $this->sql->setLogger($this->log);
     }
 
     public function processRequest()
@@ -149,12 +149,7 @@ class Api {
         foreach (explode("&", $this->query) as $key_val_pair) {
             $exploded = explode("=", $key_val_pair);
             $idx = array_search($exploded[0], $key_array, true);
-            // print_r($exploded);
-            // print_r($key_array);
-            // var_dump($idx);
-            // echo "\n";
             if ($idx !== false) {
-                // print_r(gettype($value_array[$idx]));
                 if (gettype($value_array[$idx]) == "array") {
                     array_push($value_array[$idx], $exploded[1]);
                 } else {
@@ -191,6 +186,25 @@ class Api {
             array_push($list, $nested_array[$key]);
         }
         return $list;
+    }
+
+
+    /**
+     * Check meta data from specific table in order to identify columns which
+     * contain arrays.
+     */
+    private function getArrayFields($table_name="cards")
+    {
+        $array_fields = Array();
+        // error_log("here");
+        foreach(pg_meta_data($this->db->dbconn, $table_name) as $column => $fields) {
+            // $this->log->quicklog($column);
+            // $this->log->quicklog($fields);
+            if (strpos($fields["type"], "_") !== false) {
+                array_push($array_fields, $column);
+            }
+        }
+        return $array_fields;
     }
 
 }

@@ -1,9 +1,21 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/../src/logger.php';
+// require_once $_SERVER['DOCUMENT_ROOT'].'/../src/logger.php';
 
 class SqlQueries
 {
+
+    private $arrayFields;
+    // private $log
+    public function __construct(array $arrayFields=[])
+    {
+        $this->arrayFields = $arrayFields;
+        // if (is_null($logger)) {
+        //     $this->log = new Logger();
+
+        // }
+    }
+
     public function drop($tables)
     {
         foreach ($tables as $table) {
@@ -94,16 +106,22 @@ class SqlQueries
             $query = "SELECT * FROM $table WHERE ";
             for ($i=0; $i<count($key_array); $i++) {
                 if (gettype($value_array[$i]) != "array") {
-                    $query = $query."$key_array[$i]='$value_array[$i]'";
+                    $query = $this->genQueryArrayType(
+                        $query,
+                        $key_array[$i],
+                        $value_array[$i]
+                    );
                 } else {
-                    $imploded_values = implode("','", $value_array[$i]);
-                    $query = $query."$key_array[$i] IN ('$imploded_values')";
+                    $query = $this->genQueryMultiValues(
+                        $query,
+                        $key_array[$i],
+                        $value_array[$i]
+                    );
                 }
-                if ($i != count($key_array)-1) {
+                if ($i != count($key_array) - 1) {
                     $query = $query." AND ";
                 }
             }
-            // print_r($value_array);
             $result = pg_query($query);
                 if ($debug === True) {
                     error_log($query);
@@ -168,6 +186,35 @@ class SqlQueries
         if (!pg_fetch_all($result) || is_null($result)) {
             return False;
         }
+    }
+
+    public function setArrayFields(array $arrayFields)
+    {
+        $this->arrayFields = $arrayFields;
+    }
+
+    public function setLogger(&$logger) {
+        $this->logger = $logger;
+    }
+
+    private function genQueryArrayType(string $query, string $column, string $values) {
+        if (in_array($column, $this->arrayFields) === true) {
+            $query = $query."$column='{".$values."}'";
+        } else {
+            $query = $query."$column='$values'";
+        }
+        return $query;
+    }
+
+    private function genQueryMultiValues(string $query, string $column, array $values) {
+        if (in_array($column, $this->arrayFields) === true) {
+            $imploded_values = implode("}','{", $values);
+            $query = $query."$column IN ('{".$imploded_values."}')";
+        } else {
+            $imploded_values = implode("','", $values);
+            $query = $query."$column IN ('$imploded_values')";
+        }
+        return $query;
     }
 }
 

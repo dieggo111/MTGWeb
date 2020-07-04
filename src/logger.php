@@ -34,7 +34,7 @@ class Logger {
      *  */
     public function log(array $params, bool $default=false)
     {
-        $params = $this->adjustLogType($params);
+        $params["%log%"] = $this->adjustLogType($params["%log%"]);
         if ($default === true) {
             $log = strtr($this->default_template, $params);
         } else {
@@ -42,6 +42,21 @@ class Logger {
         }
         $this->log_file->write($log);
         error_log($params["%log%"]);
+    }
+
+    public function quicklog($log_msg)
+    {
+        $log_msg = $this->adjustLogType($log_msg);
+        $log = strtr(
+            $this->default_template,
+            [
+                "%level%" => "DEBUG",
+                "%datetime%" => date('H:i:s:u'),
+                "%log%" => $log_msg
+            ]
+        );
+        $this->log_file->write($log);
+        error_log($log);
     }
 
     /**
@@ -66,12 +81,12 @@ class Logger {
     }
 
 
-    private function adjustLogType(array $dict)
+    private function adjustLogType($log)
     {
-        if (gettype($dict["%log%"]) != "string") {
-            $dict["%log%"] = json_encode($dict["%log%"]);
+        if (gettype($log) != "string") {
+            return json_encode($log);
         }
-        return $dict;
+        return $log;
     }
 
 }
