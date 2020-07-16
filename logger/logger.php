@@ -15,8 +15,6 @@ class Logger {
         $timezone='Europe/Berlin'
     )
     {
-        error_log("init loggggggggggggggggggger");
-        error_log($config_path);
         $log_cfg = json_decode(
             file_get_contents($config_path), true)["logger"];
         date_default_timezone_set($timezone);

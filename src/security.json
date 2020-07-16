@@ -1,0 +1,32 @@
+{
+    "blacklist": {
+        "characters": [
+            ";",
+            "%3B",
+            "/",
+            "2F",
+            "\\",
+            "%5C",
+            "|",
+            "7C",
+            "<",
+            "%3C",
+            ">",
+            "%3E",
+            ",",
+            "%2C"
+        ]
+    },
+    "whitelist": {
+        "requestMethods": [
+            "GET",
+            "POST"
+        ],
+        "paths": [
+            "/cards",
+            "/sets",
+            "/types",
+            "/supertypes"
+        ]
+    }
+}

@@ -4,6 +4,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/../src/sql_queries.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/../database/database.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/../logger/logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/../src/security_gateway.php';
 
 class Api {
 
@@ -16,45 +17,55 @@ class Api {
 
     public function __construct($requestMethod, $url_path, $query)
     {
+        $this->log = new Logger();
+        $this->log->header->setHeader("MTGWeb Server Logs");
+        $this->security_gateway = new SecurityGateway(
+            $requestMethod,
+            $url_path,
+            $query,
+            $this->log
+        );
         $this->db = new Database("../config/config.json");
         $this->db->initConnection();
         $this->requestMethod = $requestMethod;
         $this->query = $this->processQuery($query);
         $this->sql = new SqlQueries($this->getArrayFields());
-        $this->url_path = $url_path;
-        $this->log = new Logger();
-        $this->log->header->setHeader("MTGWeb Server Logs");
         $this->sql->setLogger($this->log);
+        $this->url_path = $url_path;
     }
 
     public function processRequest()
     {
-        switch ($this->requestMethod) {
-            case 'GET':
-                // if (is_null($this->query)) {
-                //     $response = $this->unprocessableEntityResponse();
-                //     break;
-                // }
-                if ($this->url_path == "/cards") {
-                    $response = $this->getCards();
-                }
-                if ($this->url_path == "/sets") {
-                    $response = $this->getSets();
-                }
-                if ($this->url_path == "/types") {
-                    $response = $this->getTypes();
-                }
-                if ($this->url_path == "/supertypes") {
-                    $response = $this->getSupertypes();
-                }
-                break;
-            case 'POST':
-                if ($this->url_path == "/cards") {
-                    $response = $this->insertCard();
-                }
-                break;
-            default:
-                $response = $this->notFoundResponse();
+        if ($this->security_gateway->securityCheck() === false) {
+            $response = $this->unprocessableEntityResponse();
+        } else {
+            switch ($this->requestMethod) {
+                case 'GET':
+                    // if (is_null($this->query)) {
+                    //     $response = $this->unprocessableEntityResponse();
+                    //     break;
+                    // }
+                    if ($this->url_path == "/cards") {
+                        $response = $this->getCards();
+                    }
+                    if ($this->url_path == "/sets") {
+                        $response = $this->getSets();
+                    }
+                    if ($this->url_path == "/types") {
+                        $response = $this->getTypes();
+                    }
+                    if ($this->url_path == "/supertypes") {
+                        $response = $this->getSupertypes();
+                    }
+                    break;
+                case 'POST':
+                    if ($this->url_path == "/cards") {
+                        $response = $this->insertCard();
+                    }
+                    break;
+                default:
+                    $response = $this->notFoundResponse();
+            }
         }
         header($response['status_code_header']);
         if ($response['body']) {
@@ -175,7 +186,7 @@ class Api {
     private function notFoundResponse()
     {
         $response['status_code_header'] = 'HTTP/1.1 404 Not Found';
-        $response['body'] = null;
+        $response['body'] = json_encode([]);
         return $response;
     }
 

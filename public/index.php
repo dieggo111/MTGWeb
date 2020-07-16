@@ -11,10 +11,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $url = parse_url($_SERVER['REQUEST_URI']);
 
-if (!in_array($url["path"], ['/cards', '/sets', '/types', '/supertypes'])) {
-    header("HTTP/1.1 404 Not Found");
-    exit();
-}
 if (!isset($url["query"])) {
     $url["query"] = NULL;
 }
