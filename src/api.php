@@ -3,7 +3,7 @@
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/../src/sql_queries.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/../database/database.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/../src/logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/../logger/logger.php';
 
 class Api {
 
@@ -22,7 +22,7 @@ class Api {
         $this->query = $this->processQuery($query);
         $this->sql = new SqlQueries($this->getArrayFields());
         $this->url_path = $url_path;
-        $this->log = new Logger("../config/config.json");
+        $this->log = new Logger();
         $this->log->header->setHeader("MTGWeb Server Logs");
         $this->sql->setLogger($this->log);
     }
@@ -196,10 +196,9 @@ class Api {
     private function getArrayFields($table_name="cards")
     {
         $array_fields = Array();
-        // error_log("here");
         foreach(pg_meta_data($this->db->dbconn, $table_name) as $column => $fields) {
-            // $this->log->quicklog($column);
-            // $this->log->quicklog($fields);
+            // $this->log->debug($column);
+            // $this->log->debug($fields);
             if (strpos($fields["type"], "_") !== false) {
                 array_push($array_fields, $column);
             }

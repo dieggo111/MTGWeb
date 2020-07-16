@@ -1,0 +1,7 @@
+{
+    "logger": {
+        "base_path": "../logs/",
+        "base_name": "mtgweb_server_log_",
+        "header": "MTGWeb Server Logs "
+    }
+}

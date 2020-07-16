@@ -7,11 +7,18 @@ class Logger {
     private $log_template;
     private $log_file;
     public $header;
+    private $log_level = "INFO";
+    private $valid_levels = ["ERROR", "WARNING", "INFO", "DEBUG"];
 
-    public function __construct($config_path, $timezone='Europe/Berlin')
+    public function __construct(
+        $config_path=__DIR__."/log_cfg.json",
+        $timezone='Europe/Berlin'
+    )
     {
+        error_log("init loggggggggggggggggggger");
+        error_log($config_path);
         $log_cfg = json_decode(
-            file_get_contents($config_path), true)["logging"];
+            file_get_contents($config_path), true)["logger"];
         date_default_timezone_set($timezone);
         $this->default_template = "%datetime% [%level%] - %log%";
         $this->log_template = $this->default_template;
@@ -44,7 +51,7 @@ class Logger {
         error_log($params["%log%"]);
     }
 
-    public function quicklog($log_msg)
+    public function debug($log_msg)
     {
         $log_msg = $this->adjustLogType($log_msg);
         $log = strtr(
@@ -55,7 +62,60 @@ class Logger {
                 "%log%" => $log_msg
             ]
         );
-        $this->log_file->write($log);
+        if ($this->checkLogLevel("DEBUG") === true) {
+            $this->log_file->write($log);
+        }
+        error_log($log);
+    }
+
+    public function info($log_msg)
+    {
+        $log_msg = $this->adjustLogType($log_msg);
+        $log = strtr(
+            $this->default_template,
+            [
+                "%level%" => "INFO",
+                "%datetime%" => date('H:i:s:u'),
+                "%log%" => $log_msg
+            ]
+        );
+        if ($this->checkLogLevel("INFO") === true) {
+            $this->log_file->write($log);
+        }
+        error_log($log);
+    }
+
+    public function error($log_msg)
+    {
+        $log_msg = $this->adjustLogType($log_msg);
+        $log = strtr(
+            $this->default_template,
+            [
+                "%level%" => "ERROR",
+                "%datetime%" => date('H:i:s:u'),
+                "%log%" => $log_msg
+            ]
+        );
+        if ($this->checkLogLevel("ERROR") === true) {
+            $this->log_file->write($log);
+        }
+        error_log($log);
+    }
+
+    public function warning($log_msg)
+    {
+        $log_msg = $this->adjustLogType($log_msg);
+        $log = strtr(
+            $this->default_template,
+            [
+                "%level%" => "WARNING",
+                "%datetime%" => date('H:i:s:u'),
+                "%log%" => $log_msg
+            ]
+        );
+        if ($this->checkLogLevel("WARNING") === true) {
+            $this->log_file->write($log);
+        }
         error_log($log);
     }
 
@@ -89,6 +149,22 @@ class Logger {
         return $log;
     }
 
+    public function setLogLevel(string $level) {
+        if (in_array($level, $this->valid_levels))
+        $this->log_level = $level;
+    }
+
+    private function checkLogLevel(string $level) {
+        $level_idx = array_search($level, $this->valid_levels);
+        if ($level_idx === null) {
+            return false;
+        }
+        if ($level_idx > array_search($this->log_level, $this->valid_levels)) {
+            return false;
+        }
+        return true;
+    }
+
 }
 
 
@@ -110,7 +186,6 @@ class LogFile {
     {
         $log_file = $this->getFileName();
         if (!file_exists($log_file)) {
-            error_log("Creating new log file: $log_file");
             $stream = fopen($log_file, "wb");
             fwrite($stream, $this->header->getHeader());
             fclose($stream);
