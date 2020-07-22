@@ -14,7 +14,7 @@ class SecurityGateway {
     public function __construct(
         string $requestMethod,
         string $url_path,
-        string $query,
+        $query,
         &$logger
     )
     {
