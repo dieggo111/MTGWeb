@@ -26,6 +26,7 @@
         </b-navbar-nav>
         <b-navbar-nav class="nav-items">
             <b-nav-item href="/advancedsearch">Advanced Search</b-nav-item>
+            <b-nav-item href="/createcard">Create Card</b-nav-item>
             <b-nav-item href="/deckbuilder">Deck Builder</b-nav-item>
         </b-navbar-nav>
         </b-navbar>
@@ -47,6 +48,9 @@ export default {
             input: "",
         };
     },
+    created() {
+        this.initDeckList();
+    },
     methods:{
         goSearch() {
             this.$router.push({
@@ -60,6 +64,15 @@ export default {
         keydownSubmit(event) {
             if (event.which === 13) {
                 this.goSearch()
+            }
+        },
+        initDeckList() {
+            if (localStorage.getItem("deckList") == null) {
+                var deckList = {
+                    "cards": [],
+                    "lands": []
+                };
+                localStorage.setItem("deckList", JSON.stringify(deckList));
             }
         }
     }

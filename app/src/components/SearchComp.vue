@@ -1,16 +1,18 @@
 <template>
     <div class="results-box">
-        <ToolbarComp    :displayOptions="displayOptions"
-                        :displayOptionDict="displayOptionDict"
-                        :sortOptions="sortOptions"
-                        :sortOptionDict="sortOptionDict"
-                        :perPage="perPage"
-                        :paginationRows="getSearchResultsLength"
-                        :items="searchResults"
-                        @change="setCurrentPage"/>
+        <ToolbarComp
+            :displayOptions="displayOptions"
+            :displayOptionDict="displayOptionDict"
+            :sortOptions="sortOptions"
+            :sortOptionDict="sortOptionDict"
+            :perPage="perPage"
+            :paginationRows="getSearchResultsLength"
+            :items="searchResults"
+            @change="setCurrentPage"/>
 
         <div v-if="searchResults.length >= 1">
             <b-container v-if="getDisplayOption == 'Row'">
+                    {{perPage}} {{currentPage}}
                 <b-table
                     :fields="fields"
                     :items="searchResults.slice(
@@ -33,23 +35,31 @@
                         <div :class="'card-row-item-' + index">
                             <CardComp
                                 :result="result"
-                                :displayOption="getDisplayOption" />
+                                :displayOption="getDisplayOption"
+                                @cardSelected="spawnModal" />
                         </div>
                     </b-col>
                 </b-row>
             </b-container>
             <b-container v-else>
-                <span   v-for="result in searchResults.slice(
-                            perPage*(currentPage-1),
-                            perPage*currentPage)"
-                        :key="result.card_id">
+                <div
+                    v-for="result in searchResults.slice(
+                    perPage*(currentPage-1),
+                    perPage*currentPage)"
+                    :key="result.card_id">
                     <CardComp
-                            :result="result"
-                            :displayOption="getDisplayOption" />
-                </span>
+                        :result="result"
+                        :displayOption="getDisplayOption"
+                        @cardSelected="spawnModal" />
+                </div>
             </b-container>
         </div>
         <div v-else>Can't find card with the name <span>"{{this.$route.query.name}}"</span></div>
+        <b-modal id="bv-modal-example" hide-footer>
+            <h4>Add this card to your deck list?</h4>
+            <b-button class="mt-3 mr-2" @click="addCard()">Yes</b-button>
+            <b-button class="mt-3 ml-2" @click="$bvModal.hide('bv-modal-example')">No</b-button>
+        </b-modal>
     </div>
 </template>
 
@@ -60,7 +70,7 @@ import CardComp from './CardComp';
 import ToolbarComp from './ToolbarComp';
 
 export default {
-    name: "search",
+    name: "Search",
     components: {
         CardComp,
         ToolbarComp
@@ -92,14 +102,16 @@ export default {
                 "Detail": false
             },
             searchResults: [],
-            perPage: 10,
+            perPage: 24,
             perRow: 3,
             currentPage: 1,
             blackImage: '../assets/black_trans.png',
             whiteImage: '../assets/white_trans.png',
             greenImage: '../assets/green_trans.png',
             redImage: '../assets/red_trans.png',
-            blueImage: '../assets/blue_trans.png'
+            blueImage: '../assets/blue_trans.png',
+            arrayFields: ["colors"],
+            selectedCard: {}
         };
     },
     computed: {
@@ -118,7 +130,8 @@ export default {
     methods: {
         searchCard() {
             fetch('http://localhost:8000/cards?' + this.$route.fullPath.split("?")[1])
-            .then(res => res.json())
+            .then(res => res.json()
+            )
             .then(res => {
                 console.log(res);
                 this.searchResults = res;
@@ -126,6 +139,7 @@ export default {
             )
             .catch(error => {
                 console.log(error);
+
             })
         },
         checkResults() {
@@ -146,6 +160,24 @@ export default {
             // }
             // console.log(statement)
         return statement
+        },
+        spawnModal(card) {
+            console.log(card)
+            this.selectedCard = card;
+            this.$bvModal.show('bv-modal-example');
+        },
+        addCard() {
+            console.log("add")
+            console.log(this.selectedCard)
+            this.$bvModal.hide('bv-modal-example');
+            var deckList = JSON.parse(localStorage.getItem("deckList"));
+            if (this.selectedCard.types.includes("Land")) {
+                deckList["lands"].push(this.selectedCard.card_id);
+
+            } else {
+                deckList["cards"].push(this.selectedCard.card_id);
+            }
+            localStorage.setItem("deckList", JSON.stringify(deckList))
         }
 
 

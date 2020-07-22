@@ -1,0 +1,154 @@
+<template>
+    <div class="deck-stats">
+        <b-container v-if="deckList">
+            <h3>Deck Stats</h3>
+            <b-row>
+                <b-col>Card Count</b-col>
+                <b-col>{{getCardCount}}</b-col>
+            </b-row>
+            <b-row>
+                <b-col>Color Stats</b-col>
+                <b-col>{{getColorStats}}</b-col>
+            </b-row>
+            <b-row>
+                <b-col>Type Stats</b-col>
+                <b-col>{{getTypeStats}}</b-col>
+            </b-row>
+            <b-row>
+                <b-container>
+                    <b-row>
+                        <b-col>Land Count</b-col>
+                        <b-col>{{getLandCount}}</b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <b-form-select
+                                label="Add Basic Land"
+                                v-model="selectedLandType"
+                                :options="landTypes">
+                                <template v-slot:first>
+                                    <b-form-select-option
+                                        :value="null"
+                                        disabled>
+                                        -- Add Basic Land --
+                                    </b-form-select-option>
+                                </template>
+                            </b-form-select>
+                        </b-col>
+                        <b-col>
+                            <b-button
+                                @click="addBasicLand()"
+                                variant="outline-primary">
+                                +
+                            </b-button>
+                        </b-col>
+                    </b-row>
+                </b-container>
+            </b-row>
+                <!-- <b-col>{{key}}</b-col>
+                <b-col>{{value}}</b-col> -->
+                <!-- <hr> -->
+        </b-container>
+    </div>
+</template>
+
+
+
+<script>
+
+export default {
+    name: 'Deckstats',
+    props: ["deckList"],
+    data() {
+        return{
+            colors: ["W", "R", "B", "G", "U"],
+            landTypes: ["Plains", "Mountain", "Swamp", "Forest", "Island"],
+            colorStats: {
+                "W": 0,
+                "B": 0,
+                "U": 0,
+                "G": 0,
+                "R": 0
+            },
+            types: [
+                "Artifact",
+                "Artifact,Creature",
+                "Creature",
+                "Enchantment",
+                "Enchantment,Creature",
+                "Instant",
+                "Land",
+                "Planeswalker",
+                "Sorcery"
+            ],
+            typeStats: {
+                "Artifact": 0,
+                "Artifact,Creature": 0,
+                "Creature": 0,
+                "Enchantment": 0,
+                "Enchantment,Creature": 0,
+                "Instant": 0,
+                "Land": 0,
+                "Planeswalker": 0,
+                "Sorcery": 0
+            },
+            selectedLandType: null
+        }
+    },
+    computed: {
+        getCardCount() {
+            var totalCards =
+                this.deckList["lands"].length + this.deckList["cards"].length
+            return totalCards + "/60"
+        },
+        getColorStats() {
+            var colorStats = this.countParam(this.colors, "colors", this.colorStats)
+            var total = Object.values(colorStats).reduce((a, b) => a + b, 0);
+            var colorRatios = Object();
+            Object.keys(colorStats).forEach(color => {
+                if (colorStats[color] != 0) {
+                    var ratio = colorStats[color]/total + Number.EPSILON
+                    colorRatios[color] = Math.round(ratio * 100) / 100
+                }
+            })
+            return colorRatios;
+        },
+        getTypeStats() {
+            var typeStats = this.countParam(this.types, "types", this.typeStats)
+            var total = Object.values(typeStats).reduce((a, b) => a + b, 0);
+            var typeRatios = Object();
+            Object.keys(typeStats).forEach(type => {
+                if (typeStats[type] != 0) {
+                    var ratio = typeStats[type]/total + Number.EPSILON
+                    typeRatios[type] = Math.round(ratio * 100) / 100
+                }
+            })
+            return typeRatios;
+        },
+        getLandCount() {
+            return this.deckList["lands"].length
+        }
+    },
+    methods: {
+        countParam(paramList, key, paramStats) {
+            this.deckList["cards"].forEach(card => {
+                paramList.forEach(param => {
+                    if(card[key].includes(param)) {
+                        paramStats[param] += 1;
+                    }
+                })
+            });
+            return paramStats;
+        },
+        addBasicLand() {
+            if (this.selectedLandType !== null) {
+                this.$emit("addBasicLand", this.selectedLandType);
+            }
+        }
+    }
+}
+</script>
+
+<style lang="sass" scoped>
+@import '../styles/_styles.sass'
+</style>

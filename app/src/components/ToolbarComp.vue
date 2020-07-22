@@ -56,7 +56,7 @@
 <script>
 
 export default {
-    name: "toolbar",
+    name: "Toolbar",
     props: [
         "displayOptions",
         "displayOptionDict",
@@ -68,7 +68,7 @@ export default {
     ],
     data() {
         return{
-            currentPage: 1,
+            currentPage: 1
         };
     },
     computed: {
@@ -109,7 +109,7 @@ export default {
             }
         },
         changeEvent() {
-            this.$emit('change', this.currentPage);
+            this.$emit('change', this.currentPage + 1);
         }
     }
 }
