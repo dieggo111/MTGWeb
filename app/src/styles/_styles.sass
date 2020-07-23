@@ -1,15 +1,10 @@
 $box-width: 500px
 $box-border: 1px solid DarkGray
 $box-margin-top: 50px
-// hr
-//     boarder: 2px solid #626060
+$min-width-body: 1200px
 
-// h2
-//     margin-top: 80px
-//     margin-bottom: 20px
-
-
-
+body
+    min-width: $min-width-body
 
 .nav-search-form
     margin-left: 100px
@@ -22,7 +17,7 @@ $box-margin-top: 50px
 
 .navbar
     margin-bottom: 100px
-
+    min-width: $min-width-body
 
 //index
 
@@ -167,9 +162,13 @@ $box-margin-top: 50px
 
 
 //CreateCardComp
+
 .create-card-box
     margin-top: $box-margin-top
+    min-width: 1150px
 
+.upload-card-table
+    min-width: 600px
 
 //CardPreviewComp
 
@@ -214,19 +213,43 @@ $box-margin-top: 50px
 
 .colored-mana-cost
     position: absolute
-    top: 14px
-    right: 34px
+    top: 13px
+    right: 75px
 
 .mana-symbol
     width: 18px
     border-radius: 50%
 
-.card-rarity-circle
+.card-rarity-symbol
     width: 13px
     height: 13px
     border-radius: 30%
     position: absolute
     top: 251px
-    right: 40px
-// background-color: #d8dede;
-// background-image: linear-gradient(315deg, #d8dede 0%, #e5bdf6 74%);
+    right: 82px
+
+    // background-color: #d8dede;
+    // background-image: linear-gradient(315deg, #d8dede 0%, #e5bdf6 74%);
+
+.card-text
+    position: absolute
+    left: 66px
+    width: 220px
+    height: 150px
+    word-wrap: break-word
+
+.card-pt-text
+    position: absolute
+    top: 400px
+    right: 85px
+    font-size: 18px
+    font-weight: bold
+
+.card-artwork
+    position: absolute
+    top: 45px
+    left: 49px
+
+.card-artwork-image
+    width: 250px
+    height: 200px

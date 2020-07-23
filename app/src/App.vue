@@ -30,11 +30,9 @@
             <b-nav-item href="/deckbuilder">Deck Builder</b-nav-item>
         </b-navbar-nav>
         </b-navbar>
-        <body>
-            <div class="content">
-                <router-view :key="$route.fullPath"></router-view>
-            </div>
-        </body>
+        <div class="content">
+            <router-view :key="$route.fullPath"></router-view>
+        </div>
     </div>
 </template>
 

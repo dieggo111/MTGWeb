@@ -66,7 +66,7 @@
                                         <td>
                                             <b-form-spinbutton
                                                 class="card-cost-generic-input"
-                                                v-model="genericCardCost"
+                                                v-model="genericManaCost"
                                                 min="0"
                                                 max="20" />
                                         </td>
@@ -141,6 +141,48 @@
                                     :options="getTypes('types')" />
                             </td>
                         </tr>
+                        <tr v-if="cardType == 'Creature'">
+                            <td class="first-col">Power</td>
+                            <td>
+                                <b-form-select
+                                    v-model="selectedPower"
+                                    :options="ptOptions" />
+                            </td>
+                        </tr>
+                        <tr v-if="cardType == 'Creature'">
+                            <td class="first-col">Thoughness</td>
+                            <td>
+                                <b-form-select
+                                    v-model="selectedThoughness"
+                                    :options="ptOptions" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="first-col">Card Text</td>
+                            <td>
+                                <b-form-group
+                                    :description="getTextLength">
+                                    <b-form-textarea
+                                        class="textarea"
+                                        v-model="cardText"
+                                        placeholder="Enter card text..."
+                                        rows="6"
+                                        max-rows="6"/>
+                                </b-form-group>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="first-col">Card Artwork</td>
+                            <td>
+                                <b-form-group
+                                    description="Optimal size 250x200">
+                                    <b-form-input
+                                        class="card-artwork-input"
+                                        v-model="cardArtworkURL"
+                                        placeholder="Enter an artwork URL" />
+                                </b-form-group>
+                            </td>
+                        </tr>
                     </table>
                 </b-col>
                 <b-col cols="4">
@@ -163,13 +205,14 @@ export default {
     data() {
         return{
             cardName: "",
+            maxNameChars: 24,
             blackImage: require('../assets/black_trans.png'),
             whiteImage: require('../assets/white_trans.png'),
             greenImage: require('../assets/green_trans.png'),
             redImage: require('../assets/red_trans.png'),
             blueImage: require('../assets/blue_trans.png'),
             cardColors: [],
-            genericCardCost: 0,
+            genericManaCost: 0,
             types: [],
             cardType: null,
             supertypes: [],
@@ -195,6 +238,12 @@ export default {
                 "R": 0,
                 "U": 0
             },
+            cardText: "",
+            maxCharsText: 252,
+            selectedPower: 1,
+            selectedThoughness: 1,
+            ptOptions: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "*"],
+            cardArtworkURL: ""
         };
     },
     created() {
@@ -205,14 +254,26 @@ export default {
         getCardParams() {
             return {
                 "name": this.cardName,
-                "genericMana": this.genericCardCost,
+                "genericMana": this.genericManaCost,
                 "coloredMana": this.getManaCost(),
                 "type": this.cardType,
                 "rarity": this.cardRarity,
+                "text": this.cardText.substr(0, this.maxCharsText),
+                "power": this.selectedPower,
+                "thoughness": this.selectedThoughness,
+                "artwork": this.cardArtworkURL
             }
         },
         cardNameState() {
-            return (2 < this.cardName.length && this.cardName.length < 20) ? true : false
+            return (2 < this.cardName.length
+                && this.cardName.length < this.maxNameChars) ? true : false
+        },
+        getTextLength() {
+            return "Number of characters: ".concat(
+                this.cardText.length,
+                "/",
+                this.maxCharsText
+            )
         }
     },
     methods:{
