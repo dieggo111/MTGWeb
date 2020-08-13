@@ -21,6 +21,7 @@
 
 
 <script>
+import {backendAddress} from '../utils'
 
 export default {
     name: 'Index',
@@ -35,7 +36,7 @@ export default {
     methods:{
         searchSets() {
             console.log(this.input)
-            fetch('http://localhost:8000/sets')
+            fetch(backendAddress.concat('sets'))
                 .then(res => res.json())
                 .then(res => {
                     console.log(res);

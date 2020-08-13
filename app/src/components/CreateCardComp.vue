@@ -183,6 +183,15 @@
                                 </b-form-group>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <b-button
+                                    variant="primary"
+                                    @click="uploadCard()">
+                                    Upload
+                                </b-button>
+                            </td>
+                        </tr>
                     </table>
                 </b-col>
                 <b-col cols="4">
@@ -197,7 +206,7 @@
 
 <script>
 import CardPreviewComp from './CardPreviewComp';
-import {convertSqlArrays} from '../utils';
+import {convertSqlArrays, backendAddress} from '../utils';
 
 export default {
     name: 'createcard',
@@ -278,7 +287,7 @@ export default {
     },
     methods:{
         searchTypes() {
-            fetch('http://localhost:8000/types')
+            fetch(backendAddress.concat('types'))
                 .then(res => res.json())
                 .then(res => {
                     this.types = res;
@@ -289,7 +298,7 @@ export default {
                 })
         },
         searchSuperTypes() {
-            fetch('http://localhost:8000/supertypes')
+            fetch(backendAddress.concat('supertypes'))
                 .then(res => res.json())
                 .then(res => {
                     this.supertypes = res;
@@ -329,6 +338,10 @@ export default {
                 });
             })
             return typeOptions;
+        },
+        uploadCard() {
+            console.log("upload")
+            fetch()
         }
     }
 }

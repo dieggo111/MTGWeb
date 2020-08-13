@@ -1,7 +1,7 @@
 $box-width: 500px
 $box-border: 1px solid DarkGray
 $box-margin-top: 50px
-$min-width-body: 1200px
+$min-width-body: 1400px
 
 body
     min-width: $min-width-body
@@ -14,6 +14,7 @@ body
     padding: 50px
     margin-top: 20px
     width: 90%
+    min-width: $min-width-body
 
 .navbar
     margin-bottom: 100px
@@ -120,7 +121,8 @@ body
 //DeckBuidlerComp
 
 .deck-builder
-    width: 120%
+    min-width: 1400px
+    margin-top: $box-margin-top
 
 .deck-list
     // width: 500px
@@ -129,7 +131,13 @@ body
     padding: 20px
 
 .deck-table
-    width: 70%
+    margin-top: 20px
+    width: 100%
+    font-size: 12px
+
+// .deck-table-remove-btn
+//     width: 48%
+
 
 //DeckListComp
 
@@ -156,9 +164,21 @@ body
 
 //DeckkStatsComp
 
-.deck-table-delete-btn
+.deck-stats
+    margin-bottom: 20px
+
+.deck-stats-add-btn
     width: 20%
-    // height: 20%
+    height: 80%
+    text-align: center
+
+.valid-card-count
+    color: green
+    font-weight: bold
+
+.invalid-card-count
+    color: red
+    font-weight: bold
 
 
 //CreateCardComp

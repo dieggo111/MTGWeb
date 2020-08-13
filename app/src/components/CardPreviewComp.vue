@@ -48,7 +48,10 @@
             </span>
         </div>
         <div class="card-artwork">
-            <img class="card-artwork-image" :src="cardParams['artwork']">
+            <img
+                v-if="cardParams['artwork'].length != 0"
+                class="card-artwork-image"
+                :src="cardParams['artwork']">
         </div>
     </div>
 </template>

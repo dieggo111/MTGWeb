@@ -4,7 +4,16 @@
             <h3>Deck Stats</h3>
             <b-row>
                 <b-col>Card Count</b-col>
-                <b-col>{{getCardCount}}</b-col>
+                <b-col v-if="getCardCount < 60">
+                    <span class="invalid-card-count">
+                        {{getCardCount + "/60"}}
+                    </span>
+                </b-col>
+                <b-col v-if="getCardCount >= 60">
+                    <span class="valid-card-count">
+                        {{getCardCount + "/60"}}
+                    </span>
+                </b-col>
             </b-row>
             <b-row>
                 <b-col>Color Stats</b-col>
@@ -19,29 +28,6 @@
                     <b-row>
                         <b-col>Land Count</b-col>
                         <b-col>{{getLandCount}}</b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col>
-                            <b-form-select
-                                label="Add Basic Land"
-                                v-model="selectedLandType"
-                                :options="landTypes">
-                                <template v-slot:first>
-                                    <b-form-select-option
-                                        :value="null"
-                                        disabled>
-                                        -- Add Basic Land --
-                                    </b-form-select-option>
-                                </template>
-                            </b-form-select>
-                        </b-col>
-                        <b-col>
-                            <b-button
-                                @click="addBasicLand()"
-                                variant="outline-primary">
-                                +
-                            </b-button>
-                        </b-col>
                     </b-row>
                 </b-container>
             </b-row>
@@ -62,7 +48,6 @@ export default {
     data() {
         return{
             colors: ["W", "R", "B", "G", "U"],
-            landTypes: ["Plains", "Mountain", "Swamp", "Forest", "Island"],
             colorStats: {
                 "W": 0,
                 "B": 0,
@@ -92,14 +77,13 @@ export default {
                 "Planeswalker": 0,
                 "Sorcery": 0
             },
-            selectedLandType: null
         }
     },
     computed: {
         getCardCount() {
             var totalCards =
                 this.deckList["lands"].length + this.deckList["cards"].length
-            return totalCards + "/60"
+            return totalCards
         },
         getColorStats() {
             var colorStats = this.countParam(this.colors, "colors", this.colorStats)
@@ -131,6 +115,7 @@ export default {
     },
     methods: {
         countParam(paramList, key, paramStats) {
+            console.log(this.deckList["cards"])
             this.deckList["cards"].forEach(card => {
                 paramList.forEach(param => {
                     if(card[key].includes(param)) {
@@ -139,11 +124,6 @@ export default {
                 })
             });
             return paramStats;
-        },
-        addBasicLand() {
-            if (this.selectedLandType !== null) {
-                this.$emit("addBasicLand", this.selectedLandType);
-            }
         }
     }
 }

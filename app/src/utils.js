@@ -1,3 +1,5 @@
+var backendAddress = 'http://localhost:8000/'
+
 function convertSqlArrays(array) {
     for (let i=0; i<array.length; i++) {
         array[i] = array[i].replace("{", "");
@@ -7,4 +9,4 @@ function convertSqlArrays(array) {
     return array;
 }
 
-export {convertSqlArrays};
+export {convertSqlArrays, backendAddress};

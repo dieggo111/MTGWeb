@@ -86,7 +86,7 @@
 
 
 <script>
-import {convertSqlArrays} from '../utils';
+import {convertSqlArrays, backendAddress} from '../utils';
 
 export default {
     name: 'Advancedsearch',
@@ -138,7 +138,7 @@ export default {
             });
         },
         searchSets() {
-            fetch('http://localhost:8000/sets')
+            fetch(backendAddress.concat('sets'))
                 .then(res => res.json())
                 .then(res => {
                     this.sets = res;
@@ -149,7 +149,7 @@ export default {
                 })
         },
         searchTypes() {
-            fetch('http://localhost:8000/types')
+            fetch(backendAddress.concat('types'))
                 .then(res => res.json())
                 .then(res => {
                     this.types = res;
@@ -160,7 +160,7 @@ export default {
                 })
         },
         searchSuperTypes() {
-            fetch('http://localhost:8000/supertypes')
+            fetch(backendAddress.concat('supertypes'))
                 .then(res => res.json())
                 .then(res => {
                     this.supertypes = res;

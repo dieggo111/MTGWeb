@@ -68,6 +68,7 @@
 <script>
 import CardComp from './CardComp';
 import ToolbarComp from './ToolbarComp';
+import {backendAddress} from '../utils'
 
 export default {
     name: "Search",
@@ -129,14 +130,15 @@ export default {
     },
     methods: {
         searchCard() {
-            fetch('http://localhost:8000/cards?' + this.$route.fullPath.split("?")[1])
-            .then(res => res.json()
-            )
+            fetch(backendAddress.concat(
+                'cards?',
+                this.$route.fullPath.split("?")[1]
+            ))
+            .then(res => res.json())
             .then(res => {
                 console.log(res);
                 this.searchResults = res;
-                }
-            )
+            })
             .catch(error => {
                 console.log(error);
 

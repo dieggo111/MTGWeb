@@ -6,7 +6,6 @@
                     <h3>Cards</h3>
                     <b-col v-for="(card, index) in deckList['cards']" :key="card.id">
                         <b-row>
-
                             <img
                                 class="deck-list-card-img"
                                 :src="card.image_uri_normal"
@@ -18,9 +17,9 @@
             <b-col>
                 <b-container class="land-list">
                     <h3>Lands</h3>
-                    <b-col v-for="(card, index) in deckList['lands']" :key="card.id">
+                    <b-col
+                        v-for="(card, index) in deckList['lands']" :key="card.id">
                         <b-row>
-
                             <img
                                 class="deck-list-card-img"
                                 :src="card.image_uri_normal"
