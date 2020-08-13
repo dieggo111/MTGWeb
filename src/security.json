@@ -26,7 +26,8 @@
             "/cards",
             "/sets",
             "/types",
-            "/supertypes"
+            "/supertypes",
+            "/upload"
         ]
     }
 }

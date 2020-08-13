@@ -341,7 +341,26 @@ export default {
         },
         uploadCard() {
             console.log("upload")
-            fetch()
+            fetch(
+                backendAddress.concat('upload'),
+                {
+                    method: 'post',
+                    body: JSON.stringify({
+                        "name": this.cardName,
+                        "genericMana": this.genericManaCost,
+                        "coloredMana": this.getManaCost(),
+                        "type": this.cardType,
+                        "rarity": this.cardRarity,
+                        "text": this.cardText.substr(0, this.maxCharsText),
+                        "power": this.selectedPower,
+                        "thoughness": this.selectedThoughness,
+                        "artwork": this.cardArtworkURL
+                    })
+                }
+            )
+            .catch(error => {
+                console.log(error);
+            })
         }
     }
 }

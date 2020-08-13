@@ -5,7 +5,6 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/../logger/logger.php';
 
 class SecurityGateway {
 
-    private $log;
     private $requestMethod;
     private $url_path;
     private $query;

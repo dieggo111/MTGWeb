@@ -59,7 +59,7 @@ class Api {
                     }
                     break;
                 case 'POST':
-                    if ($this->url_path == "/cards") {
+                    if ($this->url_path == "/upload") {
                         $response = $this->insertCard();
                     }
                     break;
@@ -141,7 +141,10 @@ class Api {
     private function insertCard()
     {
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
-        $response['body'] = json_encode($this->query);
+        // $response['body'] = json_encode($this->query);
+        $data = json_decode(file_get_contents('php://input'));
+        $this->log->debug($data);
+        return $response;
     }
 
     private function processQuery($query)
