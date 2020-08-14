@@ -1,0 +1,42 @@
+stages:
+    - build-statics
+    - build-images
+
+build-statics:
+    image: node:latest
+    stage: build-statics
+    script:
+        - cd app
+        - npm run build
+    artifacts:
+        paths:
+            - app/dist
+    only:
+        - master
+
+debug-image:
+    stage: build-images
+    tags:
+        - docker-image-build
+    script:
+        - ""
+    dependencies: []
+    variables:
+        TO: $CI_REGISTRY_IMAGE:latest
+        DOCKER_FILE: Dockerfile
+    only:
+        - master
+
+static-image:
+    stage: build-images
+    tags:
+        - docker-image-build
+    script:
+        - ""
+    dependencies:
+        - build-statics
+    variables:
+        TO: $CI_REGISTRY_IMAGE/static:latest
+        DOCKER_FILE: Dockerfile.static
+    only:
+        - master
