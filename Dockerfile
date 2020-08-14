@@ -1,3 +1,5 @@
-FROM php:7-apache
-MAINTAINER Marius Metzler <marius.metzler@gmx.net>
-ADD . /usr/src/app
+FROM php:7.4-cli
+LABEL maintainer="marius.metzler@gmx.net"
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+#CMD [ "php", "./your-script.php" ]
