@@ -1,0 +1,8 @@
+version: '3'
+service:
+    mtg-db:
+        image: postgres:latest
+        env_file:
+            - database.env
+        volumes:
+            - mtg_web_data:/var/lib/postgresql/data
