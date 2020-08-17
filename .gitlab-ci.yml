@@ -57,6 +57,6 @@ deploy_staging:
     image: ubuntu:latest
     stage: deploy_staging
     script:
-        - ssh root@h2900347.stratoserver.net "cd.. && cd var/mtg-web && git checkout master && git pull origin master && exit"
+        - ssh root@h2900347.stratoserver.net "cd .. && cd var/mtg-web && git checkout master && git pull origin master && exit"
     only:
         - master
