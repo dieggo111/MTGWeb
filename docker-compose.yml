@@ -1,0 +1,18 @@
+version: '3'
+services:
+    backend:
+        image: gitlab-registry.cern.ch/kit-cms/labmanager:latest
+        networks:
+            - backend
+
+    frontend:
+        image: gitlab-registry.cern.ch/kit-cms/labmanager/static:latest
+        ports:
+            - "80:80"
+        networks:
+            - frontend
+            - backend
+
+networks:
+    frontend:
+    backend:
