@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'\..\src\sql_queries.php';
+require_once __DIR__.'/../src/sql_queries.php';
 
 class Database {
 

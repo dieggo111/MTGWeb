@@ -1,5 +1,7 @@
 <?php
 
+echo(__DIR__);
+
 require '../src/sql_queries.php';
 require '../database/database.php';
 
@@ -9,10 +11,10 @@ $DB = new Database("../config/config.json");
 $DB->initConnection();
 $RESULT = array();
 
-$SQL->drop(['Sets', 'Cards', 'Types', 'Supertypes']);
-$DB->createTables("../database/models.json");
-$DB->createDefaultEntries("../database/default_values.json");
-$DB->uploadSet("../test_data/Ikoria - Lair of Behemoths.json");
+// $SQL->drop(['Sets', 'Cards', 'Types', 'Supertypes']);
+// $DB->createTables("../database/models.json");
+// $DB->createDefaultEntries("../database/default_values.json");
+$DB->uploadSet("../test_data/Throne of Eldraine.json");
 // $DB->uploadSet("../test_data/Throne of Eldraine.json");
 
 // $RESULT = $SQL->fetchAll("Types", "card_type");
@@ -23,6 +25,6 @@ $DB->uploadSet("../test_data/Ikoria - Lair of Behemoths.json");
 
 
 
-print_r($RESULT);
+// print_r($RESULT);
 $DB->closeConnection();
 ?>

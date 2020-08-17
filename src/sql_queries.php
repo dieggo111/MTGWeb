@@ -1,6 +1,5 @@
 <?php
 
-// require_once $_SERVER['DOCUMENT_ROOT'].'/../logger/logger.php';
 
 class SqlQueries
 {

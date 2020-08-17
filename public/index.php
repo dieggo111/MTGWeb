@@ -1,7 +1,7 @@
 <?php
 
 
-require $_SERVER['DOCUMENT_ROOT']."\..\src\api.php";
+require $_SERVER['DOCUMENT_ROOT']."/../src/api.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
