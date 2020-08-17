@@ -1,7 +1,5 @@
 <?php
 
-echo(__DIR__);
-
 require '../src/sql_queries.php';
 require '../database/database.php';
 
