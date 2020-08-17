@@ -55,10 +55,7 @@ static-image:
 
 
 deploy_staging:
-    type: deploy
-    # environment:
-    #     name: staging
-    #     url: example.com
+    stage: deploy_staging
     script:
         - ssh root@h2900347.stratoserver.net "cd var/www/ && git checkout master && git pull origin master && exit"
     only:
