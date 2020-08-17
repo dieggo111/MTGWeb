@@ -1,6 +1,7 @@
 version: '3'
 services:
     mtg-db:
+        container_name: mtg-db
         image: postgres:latest
         env_file:
             - database.env
