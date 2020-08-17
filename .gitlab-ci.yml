@@ -43,20 +43,19 @@ static-image:
     only:
         - master
 
-before_script:
-    - apt-get update
-    - apt-get -y install git
-    # Setup SSH deploy keys
-    - 'which ssh-agent || ( apt-get install openssh-client )'
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+# before_script:
+#     - apt-get update
+#     - apt-get -y install git
+#     - 'which ssh-agent || ( apt-get install openssh-client )'
+#     - eval $(ssh-agent -s)
+#     - ssh-add <(echo "$SSH_PRIVATE_KEY")
+#     - mkdir -p ~/.ssh
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
-deploy_staging:
-    image: ubuntu:latest
-    stage: deploy_staging
-    script:
-        - ssh root@h2900347.stratoserver.net "cd .. && cd var/ && rm -rf mtg-web && git clone https://gitlab.cern.ch/mmetzler/mtg-web.git && exit"
-    only:
-        - master
+# deploy_staging:
+#     image: ubuntu:latest
+#     stage: deploy_staging
+#     script:
+#         - ssh root@h2900347.stratoserver.net "cd .. && cd var/ && rm -rf mtg-web && git clone https://gitlab.cern.ch/mmetzler/mtg-web.git && exit"
+#     only:
+#         - master

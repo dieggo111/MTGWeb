@@ -1,5 +1,5 @@
 version: '3'
-service:
+services:
     mtg-db:
         image: postgres:latest
         env_file:
