@@ -19,8 +19,6 @@ Vue.config.productionTip = false
 
 Vue.use(VueRouter);
 
-Vue.prototype.$eventBus = new Vue()
-
 const routes = [
   { path: '/advancedsearch', component: AdvancedSearchComp, name: 'advancedsearch'},
   { path: '/deckbuilder', component: DeckBuilderComp, name: 'deckbuilder'},

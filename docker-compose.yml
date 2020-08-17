@@ -2,6 +2,8 @@ version: '3'
 services:
     backend:
         image: gitlab-registry.cern.ch/mmetzler/mtg-web
+        ports:
+            - "5432:5432"
         networks:
             - backend
 
