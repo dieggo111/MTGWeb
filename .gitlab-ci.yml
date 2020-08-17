@@ -1,6 +1,17 @@
 stages:
     - build-statics
     - build-images
+    - deploy_staging
+
+before_script:
+    - apt-get update -qq
+    - apt-get install -qq git
+    # Setup SSH deploy keys
+    - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
 build-statics:
     image: node:latest
@@ -15,7 +26,7 @@ build-statics:
     only:
         - master
 
-debug-image:
+backend-image:
     stage: build-images
     tags:
         - docker-image-build
@@ -39,5 +50,16 @@ static-image:
     variables:
         TO: $CI_REGISTRY_IMAGE/static:latest
         DOCKER_FILE: Dockerfile.static
+    only:
+        - master
+
+
+deploy_staging:
+    type: deploy
+    # environment:
+    #     name: staging
+    #     url: example.com
+    script:
+        - ssh root@h2900347.stratoserver.net "cd var/www/ && git checkout master && git pull origin master && exit"
     only:
         - master
