@@ -5,7 +5,12 @@ services:
         env_file:
             - database.env
         volumes:
-            - data:/var/lib/postgresql/data
+            - db_data:/var/lib/postgresql/data
 
 volumes:
-    data: mtg_web_data
+    db_data:
+        driver: local
+        driver_opts:
+            o: bind
+            type: none
+            device: home/mtg_web_data/
