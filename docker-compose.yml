@@ -24,6 +24,7 @@ services:
             - db_data:/var/lib/postgresql/data
         networks:
             - backend
+
 volumes:
     db_data:
         driver: local
