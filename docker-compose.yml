@@ -1,14 +1,14 @@
 version: '3'
 services:
     backend:
-        image: gitlab-registry.cern.ch/mmetzler/mtg-web
+        image: gitlab-registry.cern.ch/mmetzler/mtg-web:latest
         ports:
             - "5432:5432"
         networks:
             - backend
 
     frontend:
-        image: gitlab-registry.cern.ch/mmetzler/mtg-web/static
+        image: gitlab-registry.cern.ch/mmetzler/mtg-web/static:latest
         ports:
             - "80:80"
         networks:
