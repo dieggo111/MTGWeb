@@ -45,7 +45,7 @@ static-image:
 
 before_script:
     - apt-get update
-    - apt-get install git
+    - apt-get -y install git
     # Setup SSH deploy keys
     - 'which ssh-agent || ( apt-get install openssh-client )'
     - eval $(ssh-agent -s)
