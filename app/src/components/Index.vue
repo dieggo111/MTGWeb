@@ -10,8 +10,9 @@
             </div>
             <div class="index-deckbuilder-box">
                 <h2>Deck Builder</h2>
-                    <p>While browsing through cards, you can add them to your
-                    personal deck list. Check and edit your deck list in the
+                    <p>While browsing, you can add cards to your
+                    personal deck list by clicking on them. Check and edit
+                    your deck list in the
                     <b>deck builder</b> section.</p>
             </div>
         </div>

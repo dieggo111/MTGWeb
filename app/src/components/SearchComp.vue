@@ -15,6 +15,7 @@
                     {{perPage}} {{currentPage}}
                 <b-table
                     :fields="fields"
+                    hover
                     :items="searchResults.slice(
                         perPage*(currentPage-1),
                         perPage*currentPage)">
