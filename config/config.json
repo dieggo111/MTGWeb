@@ -1,6 +1,6 @@
 {
     "database": {
-        "host": "backend",
+        "host": "mtgweb_backend",
         "port": "5432",
         "user": "postgres",
         "password": "root"
