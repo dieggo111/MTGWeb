@@ -4,6 +4,8 @@ services:
         image: gitlab-registry.cern.ch/mmetzler/mtg-web:latest
         ports:
             - 9000:9000
+        # volumes:
+        #     - /home/backend_logs:/var/www/MTGWeb/logs
         networks:
             - backend
 
@@ -30,6 +32,7 @@ services:
 
 # volumes:
 #     db_data:
+#     backend_logs:
 
 networks:
     frontend:
