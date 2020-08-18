@@ -207,7 +207,7 @@ class Api {
      * Check meta data from specific table in order to identify columns which
      * contain arrays.
      */
-    private function getArrayFields($table_name="Cards")
+    private function getArrayFields($table_name="cards")
     {
         $array_fields = Array();
         foreach(pg_meta_data($this->db->dbconn, $table_name) as $column => $fields) {
