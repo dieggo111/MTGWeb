@@ -9,15 +9,13 @@ header("Access-Control-Allow-Methods: GET,POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-echo "Hello World";
+$url = parse_url($_SERVER['REQUEST_URI']);
 
-// $url = parse_url($_SERVER['REQUEST_URI']);
+if (!isset($url["query"])) {
+    $url["query"] = NULL;
+}
 
-// if (!isset($url["query"])) {
-//     $url["query"] = NULL;
-// }
-
-// $API = new Api($_SERVER["REQUEST_METHOD"], $url["path"], $url["query"]);
-// $API->processRequest();
+$API = new Api($_SERVER["REQUEST_METHOD"], $url["path"], $url["query"]);
+$API->processRequest();
 
 ?>

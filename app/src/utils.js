@@ -1,4 +1,4 @@
-var backendAddress = 'http://mtgweb_backend:9000/'
+var backendAddress = 'http://backend:9000/'
 // var backendAddress = 'http://localhost:8000/'
 
 function convertSqlArrays(array) {
