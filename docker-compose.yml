@@ -2,8 +2,8 @@ version: '3'
 services:
     backend:
         image: gitlab-registry.cern.ch/mmetzler/mtg-web:latest
-        expose:
-            - 9000
+        ports:
+            - 9000:9000
         networks:
             - backend
 
@@ -23,13 +23,13 @@ services:
             - database/database.env
         ports:
             - 5432:5432
-        volumes:
-            - /home/mtg_web_data:/var/lib/postgresql/data
+        # volumes:
+        #     - /home/mtg_web_data:/var/lib/postgresql/data
         networks:
             - backend
 
-volumes:
-    db_data:
+# volumes:
+#     db_data:
 
 networks:
     frontend:
