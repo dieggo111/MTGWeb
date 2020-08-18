@@ -35,7 +35,6 @@ export default {
     },
     methods:{
         searchSets() {
-            console.log(this.input)
             fetch(backendAddress.concat('sets'))
                 .then(res => res.json())
                 .then(res => {
