@@ -24,17 +24,12 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - db_data:/var/lib/postgresql/data
+            - ~/mtg_web_data:/var/lib/postgresql/data
         networks:
             - backend
 
 volumes:
     db_data:
-        driver: local
-        driver_opts:
-            o: bind
-            type: none
-            device: ~/mtg_web_data/
 
 networks:
     frontend:
