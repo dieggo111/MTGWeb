@@ -92,23 +92,28 @@ export default {
             basicMana: {
                 "Plains": {
                     "image_uri_normal": "https://img.scryfall.com/cards/normal/front/1/6/16ebbce9-fd10-4c14-b52d-cf82c0c1a58c.jpg?1591228746",
-                    "card_id": 255
+                    "card_id": 255,
+                    "name": "Plains"
                 },
                 "Swamp": {
                     "image_uri_normal": "https://img.scryfall.com/cards/normal/front/6/c/6c8c3f0e-7af4-410b-a675-9ea84f51e812.jpg?1591228797",
-                    "card_id": 328
+                    "card_id": 328,
+                    "name": "Swamp"
                 },
                 "Island": {
                     "image_uri_normal": "https://img.scryfall.com/cards/normal/front/4/b/4b2ad5b3-7257-4521-8916-6b1cbfb89e27.jpg?1591228769",
-                    "card_id": 166
+                    "card_id": 166,
+                    "name": "Island"
                 },
                 "Forest": {
                     "image_uri_normal": "https://img.scryfall.com/cards/normal/front/9/c/9c348494-f60c-4bd1-9077-bff24f2e634b.jpg?1591228875",
-                    "card_id": 112
+                    "card_id": 112,
+                    "name": "Forest"
                 },
                 "Mountain": {
                     "image_uri_normal": "https://img.scryfall.com/cards/normal/front/a/e/ae3d2fcd-11e0-4071-8c53-cb3315b7360a.jpg?1591228835",
-                    "card_id": 217
+                    "card_id": 217,
+                    "name": "Mountain"
                 }
             },
             fields: ["name", "manacost", "amount"],
@@ -121,7 +126,7 @@ export default {
     },
     computed: {
         getDeckTableItems() {
-            return this.deckList['cards'].concat(this.deckList['lands']);
+            return this.deckList['cards'];
         }
     },
     methods: {
@@ -153,11 +158,15 @@ export default {
             }
         },
         removeBasicLand() {
-            var idx = this.deckList["lands"].indexOf(this.basicMana[this.selectedLandType]);
-            console.log(idx)
+            var nameList = [];
+            var deckList = JSON.parse(localStorage.getItem("deckList"));
+            this.deckList["lands"].forEach(item => {
+                nameList.push(item.name);
+            })
+            var idx = nameList.indexOf(this.basicMana[this.selectedLandType]["name"]);
             if (idx != -1) {
                 this.deckList["lands"].splice(idx, 1);
-                var deckList = JSON.parse(localStorage.getItem("deckList"));
+                idx = deckList["lands"].indexOf(this.basicMana[this.selectedLandType]["card_id"]);
                 deckList["lands"].splice(idx, 1);
                 localStorage.setItem("deckList", JSON.stringify(deckList));
             }
@@ -171,10 +180,14 @@ export default {
             }
         },
         removeCard(item) {
-            this.deckList["cards"].pop(item);
-            var deckList = JSON.parse(localStorage.getItem("deckList"));
-            deckList["cards"].pop(item["card_id"]);
-            localStorage.setItem("deckList", JSON.stringify(deckList));
+            var idx = this.deckList["cards"].indexOf(item)
+            if (idx != -1) {
+                this.deckList["cards"].splice(idx, 1)
+                var deckList = JSON.parse(localStorage.getItem("deckList"));
+                idx = deckList["cards"].indexOf(item.card_id)
+                deckList["cards"].splice(idx, 1);
+                localStorage.setItem("deckList", JSON.stringify(deckList));
+            }
         }
     }
 }

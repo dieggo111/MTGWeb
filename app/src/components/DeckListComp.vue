@@ -5,7 +5,7 @@
                 <b-container class="card-list">
                     <h3>Cards</h3>
                     <b-col
-                        v-for="(card, index) in getSortedDeckList"
+                        v-for="(card, index) in getSortedCardList"
                         :key="card.id">
                         <b-row>
                             <img
@@ -20,7 +20,7 @@
                 <b-container class="land-list">
                     <h3>Lands</h3>
                     <b-col
-                        v-for="(card, index) in deckList['lands']" :key="card.id">
+                        v-for="(card, index) in getSortedLandList" :key="card.id">
                         <b-row>
                             <img
                                 class="deck-list-card-img"
@@ -47,7 +47,10 @@ export default {
         }
     },
     computed: {
-        getSortedDeckList() {
+        getSortedLandList() {
+            return sortArrayByProp("name", this.deckList['lands']);
+        },
+        getSortedCardList() {
             return sortArrayByProp("name", this.deckList['cards']);
         }
     },
