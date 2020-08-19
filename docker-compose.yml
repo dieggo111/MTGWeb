@@ -8,14 +8,13 @@ services:
             - /home/backend_logs:/var/www/MTGWeb/logs
         networks:
             - backend
-            - frontend
 
     frontend:
         image: gitlab-registry.cern.ch/mmetzler/mtg-web/static:latest
         ports:
             - 80:80
         networks:
-            - frontend
+            - backend
 
 
     mtg-db:
