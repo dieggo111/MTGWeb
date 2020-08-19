@@ -48,13 +48,6 @@ export default {
     data() {
         return{
             colors: ["W", "R", "B", "G", "U"],
-            colorStats: {
-                "W": 0,
-                "B": 0,
-                "U": 0,
-                "G": 0,
-                "R": 0
-            },
             types: [
                 "Artifact",
                 "Artifact,Creature",
@@ -65,18 +58,7 @@ export default {
                 "Land",
                 "Planeswalker",
                 "Sorcery"
-            ],
-            typeStats: {
-                "Artifact": 0,
-                "Artifact,Creature": 0,
-                "Creature": 0,
-                "Enchantment": 0,
-                "Enchantment,Creature": 0,
-                "Instant": 0,
-                "Land": 0,
-                "Planeswalker": 0,
-                "Sorcery": 0
-            },
+            ]
         }
     },
     computed: {
@@ -86,7 +68,14 @@ export default {
             return totalCards
         },
         getColorStats() {
-            var colorStats = this.countParam(this.colors, "colors", this.colorStats)
+            var colorStats = {
+                "W": 0,
+                "B": 0,
+                "U": 0,
+                "G": 0,
+                "R": 0
+            };
+            colorStats = this.countParam(this.colors, "colors", colorStats)
             var total = Object.values(colorStats).reduce((a, b) => a + b, 0);
             var colorRatios = Object();
             Object.keys(colorStats).forEach(color => {
@@ -98,7 +87,18 @@ export default {
             return colorRatios;
         },
         getTypeStats() {
-            var typeStats = this.countParam(this.types, "types", this.typeStats)
+            var typeStats = {
+                "Artifact": 0,
+                "Artifact,Creature": 0,
+                "Creature": 0,
+                "Enchantment": 0,
+                "Enchantment,Creature": 0,
+                "Instant": 0,
+                "Land": 0,
+                "Planeswalker": 0,
+                "Sorcery": 0
+            };
+            typeStats = this.countParam(this.types, "types", typeStats);
             var total = Object.values(typeStats).reduce((a, b) => a + b, 0);
             var typeRatios = Object();
             Object.keys(typeStats).forEach(type => {
@@ -115,6 +115,7 @@ export default {
     },
     methods: {
         countParam(paramList, key, paramStats) {
+            console.log(this.deckList["cards"])
             this.deckList["cards"].forEach(card => {
                 paramList.forEach(param => {
                     if(card[key].includes(param)) {
