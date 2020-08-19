@@ -115,7 +115,6 @@ export default {
     },
     methods: {
         countParam(paramList, key, paramStats) {
-            console.log(this.deckList["cards"])
             this.deckList["cards"].forEach(card => {
                 paramList.forEach(param => {
                     if(card[key].includes(param)) {

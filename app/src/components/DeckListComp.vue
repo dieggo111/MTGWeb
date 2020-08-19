@@ -4,7 +4,9 @@
             <b-col>
                 <b-container class="card-list">
                     <h3>Cards</h3>
-                    <b-col v-for="(card, index) in deckList['cards']" :key="card.id">
+                    <b-col
+                        v-for="(card, index) in getSortedDeckList"
+                        :key="card.id">
                         <b-row>
                             <img
                                 class="deck-list-card-img"
@@ -35,6 +37,7 @@
 
 
 <script>
+import {sortArrayByProp} from '../utils';
 
 export default {
     name: 'Decklist',
@@ -43,7 +46,10 @@ export default {
         return{
         }
     },
-    created() {
+    computed: {
+        getSortedDeckList() {
+            return sortArrayByProp("name", this.deckList['cards']);
+        }
     },
     methods: {
         getImagePosition(idx) {
@@ -64,9 +70,7 @@ export default {
             }
             var height = 900 + 20 * (len - 1) + (len - 1) * 10;
             return height + "px";
-
         }
-
     }
 }
 </script>

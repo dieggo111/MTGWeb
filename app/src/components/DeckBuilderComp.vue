@@ -58,7 +58,7 @@
                                 </b-button>
                                 <b-button
                                     class="deck-table-delete-btn"
-                                    @click="deleteCard(item)"
+                                    @click="removeCard(item)"
                                     size="sm"
                                     variant="danger">
                                     <span class="btn-text">-</span>
@@ -77,7 +77,7 @@
 <script>
 import DeckListComp from './DeckListComp';
 import DeckStatsComp from './DeckStatsComp';
-import {backendAddress} from '../utils';
+import {backendAddress, countDuplicates} from '../utils';
 
 export default {
     name: 'Deckbuilder',
@@ -163,12 +163,14 @@ export default {
             }
         },
         addCard(item) {
-            this.deckList["cards"].push(item);
-            var deckList = JSON.parse(localStorage.getItem("deckList"));
-            deckList["cards"].push(item["card_id"]);
-            localStorage.setItem("deckList", JSON.stringify(deckList))
+            if (countDuplicates(item, this.deckList["cards"]) < 4) {
+                this.deckList["cards"].push(item);
+                var deckList = JSON.parse(localStorage.getItem("deckList"));
+                deckList["cards"].push(item["card_id"]);
+                localStorage.setItem("deckList", JSON.stringify(deckList))
+            }
         },
-        deleteCard(item) {
+        removeCard(item) {
             this.deckList["cards"].pop(item);
             var deckList = JSON.parse(localStorage.getItem("deckList"));
             deckList["cards"].pop(item["card_id"]);

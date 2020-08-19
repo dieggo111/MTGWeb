@@ -15,10 +15,11 @@
                     {{perPage}} {{currentPage}}
                 <b-table
                     :fields="fields"
-                    hover
                     :items="searchResults.slice(
                         perPage*(currentPage-1),
-                        perPage*currentPage)">
+                        perPage*currentPage)"
+                    hover
+                    @row-clicked="spawnModal">
                     <template v-slot:cell(manacost)="{ item }">
                         <div v-html="getManaSymbols(item.manacost)"></div>
                     </template>
@@ -69,7 +70,7 @@
 <script>
 import CardComp from './CardComp';
 import ToolbarComp from './ToolbarComp';
-import {backendAddress} from '../utils'
+import {backendAddress, countDuplicates} from '../utils'
 
 export default {
     name: "Search",
@@ -170,15 +171,16 @@ export default {
             this.$bvModal.show('bv-modal-example');
         },
         addCard() {
-            console.log("add")
-            console.log(this.selectedCard)
             this.$bvModal.hide('bv-modal-example');
             var deckList = JSON.parse(localStorage.getItem("deckList"));
+            console.log(deckList)
             if (this.selectedCard.types.includes("Land")) {
                 deckList["lands"].push(this.selectedCard.card_id);
 
             } else {
-                deckList["cards"].push(this.selectedCard.card_id);
+                if (countDuplicates(this.selectedCard.card_id, deckList["cards"]) < 4) {
+                    deckList["cards"].push(this.selectedCard.card_id);
+                }
             }
             localStorage.setItem("deckList", JSON.stringify(deckList))
         }

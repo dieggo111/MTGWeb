@@ -19,7 +19,7 @@ $RESULT = array();
 // $RESULT = $SQL->fetchAll("Supertypes");
 
 
-// $RESULT = $SQL->fetchItems("Cards", ["types"], ["{Artifact,Creature}"]);
+$RESULT = $SQL->fetchItems("Cards", ["types"], ["{Artifact,Creature}"]);
 
 
 
